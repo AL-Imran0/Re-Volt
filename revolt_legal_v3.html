@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Re‑Volt Legal AI — Official Legal Assistant of Re‑Volt Beverage Ltd.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Exo+2:ital,wght@0,300;0,400;0,600;0,700;0,900;1,400&family=JetBrains+Mono:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root {
+  --font-display: 'Exo 2', 'Arial Black', sans-serif;
+  --font-body: 'Lora', Georgia, serif;
+  --font-heading: 'Rajdhani', 'Arial Black', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --sidebar-w: 272px;
+  --topbar-h: 66px;
+  --transition: 0.4s cubic-bezier(.4,0,.2,1);
+}
+[data-theme="dark"] {
+  --bg-base: #050810; --bg-surface: #070c18; --bg-raised: #0c1422;
+  --bg-overlay: rgba(5,8,16,0.96); --bg-glass: rgba(7,12,24,0.75);
+  --bg-input: rgba(10,16,30,0.9); --border: rgba(30,140,255,0.16);
+  --border-strong: rgba(30,140,255,0.35); --text-primary: #e6efff;
+  --text-secondary: #7090b8; --text-muted: #334d6e;
+  --blue: #1e8cff; --blue-light: #5eb5ff; --blue-dim: rgba(30,140,255,0.1);
+  --blue-glow: rgba(30,140,255,0.3); --cyan: #00d4ff; --cyan-dim: rgba(0,212,255,0.08);
+  --green: #00e676; --amber: #ffb300; --red: #ff5252;
+  --shadow-sm: 0 2px 10px rgba(0,0,0,0.5); --shadow-md: 0 8px 28px rgba(0,0,0,0.65);
+  --shadow-lg: 0 20px 60px rgba(0,0,0,0.85);
+}
+[data-theme="light"] {
+  --bg-base: #f0f5ff; --bg-surface: #f8fbff; --bg-raised: #ffffff;
+  --bg-overlay: rgba(240,245,255,0.97); --bg-glass: rgba(248,251,255,0.88);
+  --bg-input: rgba(255,255,255,0.95); --border: rgba(20,100,200,0.16);
+  --border-strong: rgba(20,100,200,0.35); --text-primary: #0a1628;
+  --text-secondary: #2a4e7a; --text-muted: #6a8aaa;
+  --blue: #0a6ccc; --blue-light: #1e8cff; --blue-dim: rgba(10,108,204,0.07);
+  --blue-glow: rgba(10,108,204,0.22); --cyan: #0088bb; --cyan-dim: rgba(0,136,187,0.07);
+  --green: #00aa44; --amber: #e68a00; --red: #cc2222;
+  --shadow-sm: 0 2px 10px rgba(0,0,0,0.07); --shadow-md: 0 8px 28px rgba(0,0,0,0.1);
+  --shadow-lg: 0 20px 60px rgba(0,0,0,0.15);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{height:100%;font-size:15px;}
+body{font-family:var(--font-body);background:var(--bg-base);color:var(--text-primary);height:100vh;overflow:hidden;display:flex;flex-direction:column;transition:background var(--transition),color var(--transition);}
+
+/* BG */
+.scene-bg{position:fixed;inset:0;z-index:0;overflow:hidden;background:var(--bg-base);transition:background var(--transition);}
+[data-theme="dark"] .scene-bg::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 15% 45%,rgba(30,140,255,0.09) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 85% 20%,rgba(0,212,255,0.07) 0%,transparent 50%),radial-gradient(ellipse 50% 50% at 55% 80%,rgba(30,140,255,0.06) 0%,transparent 45%);animation:bgShift 14s ease-in-out infinite alternate;}
+[data-theme="light"] .scene-bg::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 15% 45%,rgba(30,120,220,0.06) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 85% 20%,rgba(0,180,255,0.04) 0%,transparent 50%);animation:bgShift 14s ease-in-out infinite alternate;}
+@keyframes bgShift{0%{opacity:0.5;transform:scale(1)}100%{opacity:1;transform:scale(1.05)}}
+.circuit-grid{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:0.04;background-image:linear-gradient(rgba(30,140,255,1) 1px,transparent 1px),linear-gradient(90deg,rgba(30,140,255,1) 1px,transparent 1px);background-size:80px 80px;transition:opacity var(--transition);}
+[data-theme="light"] .circuit-grid{opacity:0.025;}
+
+/* LAYOUT */
+.app{position:relative;z-index:2;height:100vh;display:grid;grid-template-columns:var(--sidebar-w) 1fr var(--sidebar-w);grid-template-rows:var(--topbar-h) 1fr;max-width:1680px;margin:0 auto;width:100%;}
+
+/* TOPBAR */
+.topbar{grid-column:1 / -1;display:flex;align-items:center;justify-content:space-between;padding:0 1rem;height:var(--topbar-h);background:var(--bg-overlay);backdrop-filter:blur(30px) saturate(1.6);border-bottom:1px solid var(--border-strong);box-shadow:0 1px 0 rgba(30,140,255,0.08),var(--shadow-sm);transition:background var(--transition),border-color var(--transition);gap:12px;}
+.brand{display:flex;align-items:center;gap:11px;min-width:0;}
+.brand-icon{width:44px;height:44px;background:linear-gradient(135deg,#0a4080 0%,#1e8cff 50%,#00d4ff 100%);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;box-shadow:0 0 18px rgba(30,140,255,0.5);animation:iconGlow 3s ease-in-out infinite alternate;flex-shrink:0;}
+@keyframes iconGlow{0%{box-shadow:0 0 12px rgba(30,140,255,0.4)}100%{box-shadow:0 0 28px rgba(30,140,255,0.8),0 0 60px rgba(0,212,255,0.2)}}
+.brand-text{line-height:1.2;min-width:0;}
+.brand-name{font-family:var(--font-display);font-size:1.18rem;font-weight:900;color:var(--blue-light);letter-spacing:0.06em;text-shadow:0 0 20px var(--blue-glow);text-transform:uppercase;white-space:nowrap;}
+.brand-sub{font-family:var(--font-mono);font-size:0.52rem;color:var(--text-muted);letter-spacing:0.12em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.status-capsule{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,0.18);border:1px solid var(--border);border-radius:30px;padding:6px 14px;transition:all var(--transition);}
+[data-theme="light"] .status-capsule{background:rgba(255,255,255,0.5);}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:dotPulse 2.5s ease-in-out infinite;}
+@keyframes dotPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.35;transform:scale(0.55)}}
+.status-label{font-family:var(--font-mono);font-size:0.64rem;color:var(--text-secondary);white-space:nowrap;transition:color var(--transition);}
+.topbar-right{display:flex;align-items:center;gap:6px;}
+.tb-btn{background:var(--blue-dim);border:1px solid var(--border);border-radius:9px;color:var(--text-secondary);padding:6px 11px;font-family:var(--font-heading);font-size:0.75rem;font-weight:600;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:5px;white-space:nowrap;letter-spacing:0.04em;}
+.tb-btn:hover{background:rgba(30,140,255,0.18);border-color:var(--blue);color:var(--blue-light);transform:translateY(-1px);}
+.tb-btn.active{background:rgba(30,140,255,0.22);border-color:var(--blue);color:var(--blue-light);}
+.theme-btn{width:38px;height:38px;background:var(--blue-dim);border:1px solid var(--border);border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;transition:all 0.35s cubic-bezier(.34,1.56,.64,1);color:var(--blue);flex-shrink:0;}
+.theme-btn:hover{background:rgba(30,140,255,0.2);transform:rotate(25deg) scale(1.12);border-color:var(--blue);}
+
+/* SIDEBARS */
+.sidebar-left,.sidebar-right{grid-row:2;background:var(--bg-glass);backdrop-filter:blur(28px) saturate(1.4);overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:var(--border) transparent;transition:background var(--transition);}
+.sidebar-left{border-right:1px solid var(--border);}
+.sidebar-right{border-left:1px solid var(--border);}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+::-webkit-scrollbar-thumb:hover{background:var(--border-strong);}
+.sb-section{padding:1rem 0.85rem;}
+.sb-label{font-family:var(--font-mono);font-size:0.56rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--blue);margin-bottom:0.8rem;display:flex;align-items:center;gap:7px;}
+.sb-label::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* LAW CARDS */
+.law-card{background:var(--blue-dim);border:1px solid var(--border);border-radius:12px;padding:10px 12px;margin-bottom:7px;cursor:pointer;transition:all 0.25s cubic-bezier(.34,1.56,.64,1);position:relative;overflow:hidden;}
+.law-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(to bottom,var(--blue),var(--cyan));border-radius:2px 0 0 2px;}
+.law-card:hover{background:rgba(30,140,255,0.16);border-color:var(--blue-light);transform:translateX(5px);box-shadow:var(--shadow-sm),0 0 0 1px rgba(30,140,255,0.12);}
+.law-card.active-card{background:rgba(30,140,255,0.2);border-color:var(--blue);transform:translateX(5px);}
+.lc-icon{font-size:1.1rem;margin-bottom:4px;display:block;}
+.lc-name{font-family:var(--font-heading);font-size:0.86rem;font-weight:700;color:var(--text-primary);letter-spacing:0.04em;transition:color var(--transition);}
+.lc-sub{font-family:var(--font-mono);font-size:0.56rem;color:var(--blue-light);margin-top:2px;letter-spacing:0.05em;}
+.lc-desc{font-family:var(--font-body);font-size:0.66rem;color:var(--text-secondary);margin-top:5px;line-height:1.45;font-style:italic;}
+
+/* INFO ROWS */
+.info-row{display:flex;align-items:center;gap:7px;padding:6px 9px;background:var(--blue-dim);border:1px solid var(--border);border-radius:7px;margin-bottom:5px;font-family:var(--font-mono);font-size:0.62rem;color:var(--text-secondary);transition:background var(--transition);}
+.info-row i{color:var(--blue);width:12px;}
+
+/* ===== COMPANY PROFILE SECTION ===== */
+.company-profile-section {
+  background: linear-gradient(160deg, rgba(30,140,255,0.08) 0%, rgba(0,212,255,0.04) 100%);
+  border: 1px solid var(--border-strong);
+  border-radius: 14px;
+  margin: 0 0.85rem 0.85rem;
+  overflow: hidden;
+}
+.cp-header {
+  background: linear-gradient(135deg, #061830, #0a3060, #0c1e45);
+  padding: 14px 14px 12px;
+  border-bottom: 1px solid var(--border-strong);
+  text-align: center;
+  position: relative;
+}
+[data-theme="light"] .cp-header { background: linear-gradient(135deg, #1a4a8a, #2a66bb, #1a5aaa); }
+.cp-badge {
+  position: absolute; top: 8px; right: 8px;
+  font-family: var(--font-mono); font-size: 0.46rem; color: var(--cyan);
+  background: rgba(0,212,255,0.12); border: 1px solid rgba(0,212,255,0.3);
+  border-radius: 20px; padding: 2px 7px; letter-spacing: 0.08em; text-transform: uppercase;
+}
+.cp-logo-wrap {
+  width: 60px; height: 60px; margin: 0 auto 8px;
+  background: linear-gradient(135deg, #0a3060, #1e8cff, #00d4ff);
+  border-radius: 16px; display: flex; align-items: center; justify-content: center;
+  font-size: 2rem; box-shadow: 0 0 24px rgba(30,140,255,0.6);
+  animation: logoPulse 4s ease-in-out infinite;
+}
+@keyframes logoPulse{0%,100%{box-shadow:0 0 20px rgba(30,140,255,0.4)}50%{box-shadow:0 0 40px rgba(30,140,255,0.85),0 0 80px rgba(0,212,255,0.2)}}
+.cp-company-name {
+  font-family: var(--font-display); font-size: 1.05rem; font-weight: 900;
+  color: #ffffff; letter-spacing: 0.06em; text-transform: uppercase;
+  text-shadow: 0 0 16px rgba(30,140,255,0.7);
+}
+.cp-tagline {
+  font-family: var(--font-mono); font-size: 0.54rem; color: #00d4ff;
+  letter-spacing: 0.12em; text-transform: uppercase; margin-top: 3px;
+}
+.cp-body { padding: 10px 12px; }
+.cp-row {
+  display: flex; align-items: flex-start; gap: 8px;
+  padding: 6px 8px; border-radius: 8px; margin-bottom: 4px;
+  background: rgba(30,140,255,0.06); border: 1px solid var(--border);
+  transition: background 0.2s;
+}
+.cp-row:hover { background: rgba(30,140,255,0.12); }
+.cp-row-icon { color: var(--blue); font-size: 0.68rem; margin-top: 2px; flex-shrink: 0; width: 12px; }
+.cp-row-content { flex: 1; min-width: 0; }
+.cp-row-label { font-family: var(--font-mono); font-size: 0.5rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+.cp-row-value { font-family: var(--font-body); font-size: 0.7rem; color: var(--text-primary); margin-top: 1px; }
+.cp-desc-box {
+  background: rgba(0,0,0,0.12); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 10px; margin-top: 8px;
+}
+[data-theme="light"] .cp-desc-box { background: rgba(10,60,150,0.04); }
+.cp-desc-text {
+  font-family: var(--font-body); font-size: 0.68rem; color: var(--text-secondary);
+  line-height: 1.55; font-style: italic;
+}
+.cp-laws-pills { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+.cp-law-pill {
+  font-family: var(--font-mono); font-size: 0.5rem; color: var(--blue-light);
+  background: var(--blue-dim); border: 1px solid var(--border);
+  border-radius: 20px; padding: 2px 8px; cursor: pointer;
+  transition: all 0.2s; white-space: nowrap;
+}
+.cp-law-pill:hover { background: rgba(30,140,255,0.2); border-color: var(--blue); transform: translateY(-1px); }
+.cp-stats-mini { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; margin-top: 8px; }
+.cp-stat-mini {
+  background: rgba(30,140,255,0.07); border: 1px solid var(--border);
+  border-radius: 8px; padding: 6px 4px; text-align: center;
+}
+.cp-stat-val { font-family: var(--font-display); font-size: 0.95rem; font-weight: 900; color: var(--blue-light); }
+.cp-stat-lbl { font-family: var(--font-mono); font-size: 0.44rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 1px; }
+
+/* RIGHT SIDEBAR */
+.rv-hero{background:linear-gradient(160deg,var(--bg-raised) 0%,var(--bg-surface) 100%);padding:20px 15px 14px;border-bottom:1px solid var(--border);text-align:center;transition:background var(--transition);}
+.rv-icon-big{width:72px;height:72px;margin:0 auto 12px;background:linear-gradient(135deg,#0a3060,#1e8cff,#00d4ff);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:2.2rem;box-shadow:0 0 28px rgba(30,140,255,0.5);animation:logoPulse 4s ease-in-out infinite;}
+.rv-company{font-family:var(--font-display);font-size:1rem;font-weight:900;color:var(--blue-light);letter-spacing:0.05em;text-transform:uppercase;text-shadow:0 0 14px var(--blue-glow);}
+.rv-tagline{font-family:var(--font-mono);font-size:0.56rem;color:var(--cyan);letter-spacing:0.13em;text-transform:uppercase;margin:4px 0 8px;}
+.rv-desc{font-family:var(--font-body);font-size:0.67rem;color:var(--text-secondary);font-style:italic;line-height:1.5;}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin:10px 8px 0;}
+.stat-box{background:var(--blue-dim);border:1px solid var(--border);border-radius:9px;padding:8px 6px;text-align:center;transition:background var(--transition),border-color 0.2s;}
+.stat-box:hover{border-color:var(--blue);background:rgba(30,140,255,0.15);}
+.stat-val{font-family:var(--font-display);font-size:1.1rem;font-weight:900;color:var(--blue-light);line-height:1;}
+.stat-lbl{font-family:var(--font-mono);font-size:0.46rem;color:var(--text-muted);margin-top:3px;letter-spacing:0.06em;text-transform:uppercase;}
+.tool-btn{width:100%;display:flex;align-items:center;gap:9px;padding:9px 11px;background:var(--blue-dim);border:1px solid var(--border);border-radius:10px;margin-bottom:6px;cursor:pointer;transition:all 0.2s;font-family:var(--font-heading);font-size:0.78rem;font-weight:600;color:var(--text-secondary);text-align:left;letter-spacing:0.04em;}
+.tool-btn:hover{background:rgba(30,140,255,0.18);border-color:var(--blue);color:var(--text-primary);transform:translateX(-3px);box-shadow:3px 0 0 var(--blue) inset;}
+.tool-btn i{color:var(--blue);width:14px;flex-shrink:0;}
+.tool-desc{font-family:var(--font-mono);font-size:0.54rem;color:var(--text-muted);margin-top:1px;}
+.sb-div{height:1px;background:var(--border);margin:5px 0 12px;}
+
+/* CHAT MAIN */
+.chat-main{grid-row:2;display:flex;flex-direction:column;overflow:hidden;background:var(--bg-glass);backdrop-filter:blur(16px);position:relative;transition:background var(--transition);}
+.chat-subheader{display:flex;align-items:center;justify-content:space-between;padding:8px 16px;border-bottom:1px solid var(--border);background:rgba(0,0,0,0.1);flex-shrink:0;transition:background var(--transition);}
+[data-theme="light"] .chat-subheader{background:rgba(255,255,255,0.25);}
+.chat-tags{display:flex;gap:5px;align-items:center;flex-wrap:wrap;}
+.chat-tag{font-family:var(--font-mono);font-size:0.58rem;color:var(--text-muted);background:var(--blue-dim);border:1px solid var(--border);border-radius:20px;padding:2px 9px;white-space:nowrap;transition:background var(--transition);}
+.chat-tag.active{color:var(--cyan);border-color:rgba(0,212,255,0.3);background:rgba(0,212,255,0.08);}
+.subhdr-right{display:flex;align-items:center;gap:6px;}
+.topic-badge{font-family:var(--font-mono);font-size:0.6rem;color:var(--text-secondary);background:var(--blue-dim);border:1px solid var(--border);border-radius:6px;padding:3px 9px;}
+
+/* MESSAGES */
+.messages{flex:1;overflow-y:auto;padding:18px 14px;display:flex;flex-direction:column;gap:16px;scroll-behavior:smooth;}
+
+/* Welcome */
+.welcome-hero{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px 20px;flex:1;min-height:0;}
+.welcome-icon{width:90px;height:90px;background:linear-gradient(135deg,#061830,#1e8cff,#00d4ff);border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:2.8rem;margin-bottom:18px;box-shadow:0 0 40px rgba(30,140,255,0.55);animation:welcomePulse 3.5s ease-in-out infinite;}
+@keyframes welcomePulse{0%,100%{box-shadow:0 0 30px rgba(30,140,255,0.4);transform:scale(1)}50%{box-shadow:0 0 60px rgba(30,140,255,0.8),0 0 100px rgba(0,212,255,0.2);transform:scale(1.03)}}
+.welcome-title{font-family:var(--font-display);font-size:1.9rem;font-weight:900;color:var(--blue-light);letter-spacing:0.06em;text-transform:uppercase;text-shadow:0 0 24px var(--blue-glow);margin-bottom:4px;}
+.welcome-subtitle{font-family:var(--font-mono);font-size:0.68rem;color:var(--cyan);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:14px;}
+.welcome-text{font-family:var(--font-body);font-size:0.88rem;color:var(--text-secondary);max-width:480px;line-height:1.6;font-style:italic;margin-bottom:20px;}
+.welcome-chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+.welcome-chip{font-family:var(--font-heading);font-size:0.72rem;font-weight:600;color:var(--text-secondary);background:var(--blue-dim);border:1px solid var(--border);border-radius:20px;padding:5px 13px;cursor:pointer;transition:all 0.2s cubic-bezier(.34,1.56,.64,1);letter-spacing:0.03em;}
+.welcome-chip:hover{background:rgba(30,140,255,0.2);color:var(--blue-light);border-color:var(--blue);transform:translateY(-2px) scale(1.04);box-shadow:0 4px 14px var(--blue-glow);}
+
+/* Message Bubbles */
+.msg-wrap{display:flex;flex-direction:column;max-width:94%;gap:5px;animation:msgIn 0.35s cubic-bezier(.34,1.56,.64,1) both;}
+@keyframes msgIn{from{opacity:0;transform:translateY(12px) scale(0.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+.msg-wrap.user{align-self:flex-end;align-items:flex-end;}
+.msg-wrap.ai{align-self:flex-start;align-items:flex-start;}
+.msg-meta{font-family:var(--font-mono);font-size:0.58rem;color:var(--text-muted);display:flex;align-items:center;gap:8px;}
+.msg-bubble{padding:12px 16px;border-radius:16px;font-family:var(--font-body);font-size:0.87rem;line-height:1.65;position:relative;max-width:100%;}
+.msg-wrap.user .msg-bubble{background:linear-gradient(135deg,#0a4d99,#1e8cff);border-bottom-right-radius:4px;color:#fff;box-shadow:0 4px 16px rgba(30,140,255,0.35);}
+.msg-wrap.ai .msg-bubble{background:var(--bg-raised);border:1px solid var(--border);border-bottom-left-radius:4px;color:var(--text-primary);box-shadow:var(--shadow-sm);transition:background var(--transition),border-color var(--transition);}
+
+/* AI bubble inner elements */
+.msg-bubble strong{color:var(--blue-light);font-weight:700;}
+.msg-bubble .rv-tag{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:0.6rem;color:var(--cyan);background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.25);border-radius:6px;padding:3px 9px;margin-bottom:10px;letter-spacing:0.08em;text-transform:uppercase;}
+.msg-bubble .step-list{margin:12px 0;display:flex;flex-direction:column;gap:8px;}
+.msg-bubble .step-item{display:flex;gap:10px;background:var(--blue-dim);border:1px solid var(--border);border-radius:10px;padding:9px 12px;transition:background var(--transition),border-color 0.2s;}
+.msg-bubble .step-item:hover{background:rgba(30,140,255,0.15);border-color:var(--blue);}
+.msg-bubble .step-num{width:22px;height:22px;border-radius:6px;flex-shrink:0;background:linear-gradient(135deg,var(--blue),var(--cyan));color:#fff;font-family:var(--font-display);font-size:0.7rem;font-weight:900;display:flex;align-items:center;justify-content:center;margin-top:1px;}
+.msg-bubble .law-tag{display:inline-block;font-family:var(--font-heading);font-size:0.68rem;font-weight:700;color:var(--blue-light);background:var(--blue-dim);border:1px solid var(--border);border-radius:5px;padding:2px 7px;margin:2px 0;letter-spacing:0.04em;}
+.msg-bubble .alert-box{background:rgba(255,179,0,0.08);border:1px solid rgba(255,179,0,0.25);border-radius:9px;padding:9px 12px;margin:10px 0;font-size:0.82rem;color:var(--text-secondary);}
+.msg-bubble .alert-box i{color:var(--amber);margin-right:6px;}
+.msg-bubble .info-box{background:rgba(30,140,255,0.07);border:1px solid rgba(30,140,255,0.25);border-radius:9px;padding:9px 12px;margin:10px 0;font-size:0.82rem;color:var(--text-secondary);}
+.msg-bubble .info-box i{color:var(--blue-light);margin-right:6px;}
+.msg-bubble .success-box{background:rgba(0,230,118,0.07);border:1px solid rgba(0,230,118,0.25);border-radius:9px;padding:9px 12px;margin:10px 0;font-size:0.82rem;color:var(--text-secondary);}
+.msg-bubble .success-box i{color:var(--green);margin-right:6px;}
+.msg-bubble .example-box{background:rgba(0,212,255,0.06);border:1px solid rgba(0,212,255,0.2);border-left:3px solid var(--cyan);border-radius:0 9px 9px 0;padding:9px 12px;margin:8px 0;font-size:0.82rem;}
+.msg-bubble .example-box .ex-label{font-family:var(--font-mono);font-size:0.54rem;color:var(--cyan);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;}
+
+/* Google verification links */
+.msg-bubble .verify-section{margin-top:14px;padding-top:10px;border-top:1px solid var(--border);}
+.msg-bubble .verify-label{font-family:var(--font-mono);font-size:0.54rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;display:flex;align-items:center;gap:5px;}
+.msg-bubble .verify-label i{color:var(--blue);}
+.verify-links{display:flex;flex-wrap:wrap;gap:5px;}
+.verify-link{display:inline-flex;align-items:center;gap:5px;font-family:var(--font-mono);font-size:0.58rem;color:var(--blue-light);background:var(--blue-dim);border:1px solid var(--border);border-radius:6px;padding:3px 9px;text-decoration:none;transition:all 0.2s;cursor:pointer;}
+.verify-link:hover{background:rgba(30,140,255,0.18);border-color:var(--blue);transform:translateY(-1px);}
+.verify-link .g-dot{width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,#4285f4,#ea4335,#fbbc05,#34a853);flex-shrink:0;}
+
+/* Message Actions */
+.msg-actions{display:flex;gap:4px;margin-top:2px;opacity:0;transition:opacity 0.2s;flex-wrap:wrap;}
+.msg-wrap:hover .msg-actions{opacity:1;}
+.act-btn{background:var(--blue-dim);border:1px solid var(--border);border-radius:6px;padding:3px 8px;font-family:var(--font-mono);font-size:0.56rem;color:var(--text-muted);cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:3px;}
+.act-btn:hover{background:rgba(30,140,255,0.18);color:var(--blue-light);border-color:var(--blue);}
+.act-btn.speaking{color:var(--cyan);border-color:rgba(0,212,255,0.4);background:rgba(0,212,255,0.08);}
+
+/* Typing */
+.typing-wrap{align-self:flex-start;}
+.typing-bubble{display:flex;align-items:center;gap:6px;background:var(--bg-raised);border:1px solid var(--border);border-radius:16px;border-bottom-left-radius:4px;padding:13px 18px;}
+.typing-dot{width:7px;height:7px;background:var(--blue);border-radius:50%;animation:typBounce 1.4s ease-in-out infinite;}
+.typing-dot:nth-child(2){animation-delay:0.18s}
+.typing-dot:nth-child(3){animation-delay:0.36s}
+@keyframes typBounce{0%,60%,100%{transform:translateY(0);opacity:0.3}30%{transform:translateY(-9px);opacity:1}}
+.typing-label{font-family:var(--font-mono);font-size:0.62rem;color:var(--text-muted);}
+
+/* CHIPS */
+.chips-row{display:flex;gap:6px;flex-wrap:wrap;padding:8px 14px;border-top:1px solid var(--border);background:rgba(0,0,0,0.08);flex-shrink:0;transition:background var(--transition);}
+[data-theme="light"] .chips-row{background:rgba(255,255,255,0.2);}
+.chip{background:var(--blue-dim);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-family:var(--font-heading);font-size:0.68rem;font-weight:600;color:var(--text-secondary);cursor:pointer;transition:all 0.2s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;letter-spacing:0.03em;}
+.chip:hover{background:rgba(30,140,255,0.18);border-color:var(--blue);color:var(--blue-light);transform:translateY(-2px) scale(1.03);box-shadow:0 4px 12px var(--blue-glow);}
+
+/* INPUT */
+.input-area{padding:8px 14px 12px;flex-shrink:0;background:rgba(0,0,0,0.12);border-top:1px solid var(--border);transition:background var(--transition);}
+[data-theme="light"] .input-area{background:rgba(255,255,255,0.25);}
+.input-box{display:flex;align-items:flex-end;gap:7px;background:var(--bg-input);border:1px solid var(--border-strong);border-radius:16px;padding:8px 10px;transition:border-color 0.2s,box-shadow 0.2s,background var(--transition);box-shadow:var(--shadow-sm);}
+.input-box:focus-within{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-dim),var(--shadow-md);}
+.msg-input{flex:1;background:transparent;border:none;outline:none;color:var(--text-primary);font-family:var(--font-body);font-size:0.87rem;resize:none;max-height:100px;min-height:22px;line-height:1.55;padding:2px 0;transition:color var(--transition);}
+.msg-input::placeholder{color:var(--text-muted);font-style:italic;}
+.input-btns{display:flex;align-items:center;gap:5px;flex-shrink:0;}
+.mic-btn{width:36px;height:36px;background:rgba(0,212,255,0.09);border:1px solid rgba(0,212,255,0.28);border-radius:9px;color:var(--cyan);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;font-size:0.88rem;}
+.mic-btn:hover{background:rgba(0,212,255,0.18);border-color:var(--cyan);box-shadow:0 0 14px rgba(0,212,255,0.3);}
+.mic-btn.recording{background:rgba(255,50,50,0.15);border-color:rgba(255,80,80,0.6);color:#ff5555;animation:micPulse 0.9s ease-in-out infinite;}
+@keyframes micPulse{0%,100%{box-shadow:0 0 10px rgba(255,80,80,0.3)}50%{box-shadow:0 0 25px rgba(255,80,80,0.7)}}
+.send-btn{width:36px;height:36px;background:linear-gradient(135deg,#0a5caa,#1e8cff);border:none;border-radius:9px;color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.25s cubic-bezier(.34,1.56,.64,1);font-size:0.86rem;box-shadow:0 2px 10px var(--blue-glow);}
+.send-btn:hover{transform:scale(1.1) rotate(-6deg);box-shadow:0 4px 20px rgba(30,140,255,0.55);}
+.send-btn:active{transform:scale(0.92);}
+.send-btn:disabled{opacity:0.45;cursor:not-allowed;transform:none;}
+.input-footer{display:flex;align-items:center;justify-content:space-between;padding-top:5px;font-family:var(--font-mono);font-size:0.54rem;color:var(--text-muted);}
+.speak-pill{display:none;align-items:center;gap:5px;font-family:var(--font-mono);font-size:0.6rem;color:var(--blue-light);background:rgba(30,140,255,0.1);border:1px solid rgba(30,140,255,0.25);border-radius:20px;padding:2px 9px;}
+.speak-pill.on{display:flex;}
+.speak-pill .sw{display:flex;gap:2px;align-items:center;}
+.speak-pill .sw-bar{width:2px;border-radius:1px;background:var(--blue-light);animation:swA 0.6s ease-in-out infinite;}
+.speak-pill .sw-bar:nth-child(1){height:5px}.speak-pill .sw-bar:nth-child(2){height:9px;animation-delay:.15s}.speak-pill .sw-bar:nth-child(3){height:7px;animation-delay:.3s}
+@keyframes swA{0%,100%{transform:scaleY(0.4)}50%{transform:scaleY(1.3)}}
+
+/* VOICE MODAL */
+.voice-modal-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);align-items:center;justify-content:center;}
+.voice-modal-overlay.open{display:flex;animation:overlayIn 0.25s ease;}
+@keyframes overlayIn{from{opacity:0}to{opacity:1}}
+.voice-modal{background:var(--bg-overlay);border:1px solid rgba(0,212,255,0.4);border-radius:22px;padding:28px 24px;width:340px;max-width:94vw;box-shadow:0 0 60px rgba(0,212,255,0.2),var(--shadow-lg);animation:modalIn 0.35s cubic-bezier(.34,1.56,.64,1);text-align:center;position:relative;transition:background var(--transition);}
+@keyframes modalIn{from{opacity:0;transform:scale(0.88) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.vm-close{position:absolute;top:14px;right:14px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.07);border:1px solid var(--border);cursor:pointer;color:var(--text-muted);font-size:0.8rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+.vm-close:hover{background:rgba(255,80,80,0.15);color:#ff6666;border-color:rgba(255,80,80,0.4);}
+.vm-title{font-family:var(--font-mono);font-size:0.66rem;color:var(--cyan);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:18px;}
+.vm-orb-wrap{position:relative;width:100px;height:100px;margin:0 auto 14px;}
+.vm-orb{width:100px;height:100px;background:radial-gradient(circle,rgba(0,212,255,0.25) 0%,rgba(30,140,255,0.1) 60%,transparent 100%);border:2px solid rgba(0,212,255,0.5);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.2rem;cursor:pointer;transition:all 0.2s;position:relative;z-index:1;}
+.vm-orb:hover{transform:scale(1.05);border-color:var(--cyan);}
+.vm-orb.active{background:radial-gradient(circle,rgba(255,80,80,0.2) 0%,rgba(200,40,40,0.1) 60%,transparent 100%);border-color:rgba(255,80,80,0.6);}
+.vm-ring{position:absolute;inset:-8px;border:2px solid rgba(0,212,255,0.2);border-radius:50%;animation:ringPulse 2s ease-in-out infinite;}
+.vm-ring2{position:absolute;inset:-18px;border:1px solid rgba(0,212,255,0.1);border-radius:50%;animation:ringPulse 2s ease-in-out infinite 0.5s;}
+@keyframes ringPulse{0%,100%{transform:scale(1);opacity:0.6}50%{transform:scale(1.12);opacity:0.15}}
+.vm-status{font-family:var(--font-body);font-size:0.78rem;color:var(--text-secondary);margin-bottom:10px;min-height:1.4em;}
+.vm-transcript{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:9px 12px;min-height:44px;font-family:var(--font-body);font-size:0.76rem;color:var(--text-primary);font-style:italic;line-height:1.5;margin-bottom:14px;transition:background var(--transition);}
+[data-theme="light"] .vm-transcript{background:rgba(0,0,0,0.03);}
+.vm-btns{display:flex;gap:8px;justify-content:center;}
+.vm-btn{background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:9px;padding:7px 16px;font-family:var(--font-heading);font-size:0.76rem;font-weight:600;color:var(--text-secondary);cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:5px;}
+.vm-btn:hover{background:rgba(30,140,255,0.15);color:var(--text-primary);border-color:var(--blue);}
+.vm-btn.send-voice{background:rgba(10,100,204,0.2);color:var(--blue-light);border-color:rgba(30,140,255,0.35);}
+.vm-btn.send-voice:hover{background:rgba(10,100,204,0.35);}
+
+/* TOAST */
+.toast{position:fixed;top:74px;right:16px;background:var(--bg-raised);border:1px solid var(--border-strong);border-radius:12px;padding:9px 14px;font-family:var(--font-body);font-size:0.76rem;color:var(--text-primary);backdrop-filter:blur(16px);z-index:9999;display:flex;align-items:center;gap:8px;transform:translateX(140%);transition:transform 0.35s cubic-bezier(.34,1.56,.64,1),background var(--transition);box-shadow:var(--shadow-md);max-width:280px;}
+.toast.show{transform:translateX(0);}
+.toast i{color:var(--green);flex-shrink:0;}
+.toast.warn i{color:var(--amber);}
+.toast.error i{color:var(--red);}
+
+/* BOTTOMBAR */
+.bottombar{position:fixed;bottom:0;left:0;right:0;display:flex;align-items:center;padding:4px 1.2rem;gap:14px;border-top:1px solid var(--border);background:var(--bg-overlay);backdrop-filter:blur(16px);font-family:var(--font-mono);font-size:0.52rem;color:var(--text-muted);z-index:100;height:26px;transition:background var(--transition);}
+.bb-item{display:flex;align-items:center;gap:4px;white-space:nowrap;}
+.bb-item i{font-size:0.5rem;color:var(--blue);}
+.bb-center{flex:1;text-align:center;font-style:italic;font-family:var(--font-body);font-size:0.56rem;}
+.streaming-cursor::after{content:'▋';animation:blink 0.8s step-end infinite;color:var(--blue-light);}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* VOICE VIZ */
+.voice-viz-bar{display:none;align-items:center;justify-content:center;gap:3px;padding:5px 10px;margin-bottom:6px;background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.25);border-radius:10px;}
+.voice-viz-bar.active{display:flex;}
+.v-bar{width:3px;border-radius:2px;background:var(--cyan);animation:vBarAnim 0.7s ease-in-out infinite;}
+.v-bar:nth-child(1){height:6px;animation-delay:0s}.v-bar:nth-child(2){height:14px;animation-delay:0.08s}.v-bar:nth-child(3){height:20px;animation-delay:0.16s}.v-bar:nth-child(4){height:26px;animation-delay:0.12s}.v-bar:nth-child(5){height:18px;animation-delay:0.24s}.v-bar:nth-child(6){height:22px;animation-delay:0.04s}.v-bar:nth-child(7){height:12px;animation-delay:0.2s}.v-bar:nth-child(8){height:8px;animation-delay:0.28s}
+@keyframes vBarAnim{0%,100%{transform:scaleY(0.35);opacity:0.45}50%{transform:scaleY(1.5);opacity:1}}
+.v-bar-label{font-family:var(--font-mono);font-size:0.62rem;color:var(--cyan);margin-left:8px;}
+
+/* RESPONSIVE */
+@media(max-width:1100px){:root{--sidebar-w:220px;}}
+@media(max-width:820px){.app{grid-template-columns:0 1fr 0;}.sidebar-left,.sidebar-right{display:none;}.brand-sub{display:none;}}
+@media(max-width:500px){.topbar{padding:0 0.6rem;gap:8px;}.brand-name{font-size:1rem;}.tb-btn span{display:none;}}
+</style>
+</head>
+<body>
+
+<div class="scene-bg"></div>
+<div class="circuit-grid"></div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <i class="fas fa-check-circle" id="toastIcon"></i>
+  <span id="toastMsg">Done!</span>
+</div>
+
+<!-- VOICE MODAL -->
+<div class="voice-modal-overlay" id="voiceModal">
+  <div class="voice-modal">
+    <button class="vm-close" onclick="closeVoiceModal()"><i class="fas fa-times"></i></button>
+    <div class="vm-title">⚡ Re‑Volt Voice Input</div>
+    <div class="vm-orb-wrap">
+      <div class="vm-ring"></div><div class="vm-ring2"></div>
+      <div class="vm-orb" id="vmOrb" onclick="toggleRecording()">🎙️</div>
+    </div>
+    <div class="vm-status" id="vmStatus">Click the orb to start speaking</div>
+    <div class="vm-transcript" id="vmTranscript">Your question will appear here…</div>
+    <div class="vm-btns">
+      <button class="vm-btn" onclick="closeVoiceModal()"><i class="fas fa-times"></i> Cancel</button>
+      <button class="vm-btn" onclick="clearVoiceTranscript()"><i class="fas fa-redo"></i> Clear</button>
+      <button class="vm-btn send-voice" onclick="sendVoice()"><i class="fas fa-paper-plane"></i> Send</button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div class="app">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-icon">⚡</div>
+      <div class="brand-text">
+        <span class="brand-name">Re‑Volt Legal AI</span>
+        <span class="brand-sub">Official Legal Assistant · Re‑Volt Beverage Ltd. · Bangladesh</span>
+      </div>
+    </div>
+    <div class="status-capsule">
+      <div class="status-dot"></div>
+      <span class="status-label" id="statusLabel">Re‑Volt Legal AI — Ready</span>
+    </div>
+    <div class="topbar-right">
+      <button class="tb-btn" onclick="toggleAutoSpeak()" id="autoSpeakBtn"><i class="fas fa-volume-up"></i><span>Auto-Speak</span></button>
+      <button class="tb-btn" onclick="exportChat()"><i class="fas fa-download"></i><span>Export</span></button>
+      <button class="tb-btn" onclick="clearAll()"><i class="fas fa-trash-alt"></i><span>Clear</span></button>
+      <button class="theme-btn" onclick="toggleTheme()" id="themeBtn"><i class="fas fa-moon" id="themeIcon"></i></button>
+    </div>
+  </header>
+
+  <!-- LEFT SIDEBAR -->
+  <aside class="sidebar-left">
+
+    <!-- ===== COMPANY PROFILE ===== -->
+    <div class="sb-section" style="padding-bottom:0.3rem;">
+      <div class="sb-label"><i class="fas fa-building"></i> Company Profile</div>
+    </div>
+    <div class="company-profile-section">
+      <div class="cp-header">
+        <div class="cp-badge">🔴 Live Entity</div>
+        <div class="cp-logo-wrap">⚡</div>
+        <div class="cp-company-name">Re‑Volt Beverage Ltd.</div>
+        <div class="cp-tagline">Premium Electrolyte Drink · Bangladesh</div>
+      </div>
+      <div class="cp-body">
+        <div class="cp-row">
+          <i class="fas fa-map-marker-alt cp-row-icon"></i>
+          <div class="cp-row-content">
+            <div class="cp-row-label">Registered Address</div>
+            <div class="cp-row-value">Dhaka, Bangladesh (RJSC Registration)</div>
+          </div>
+        </div>
+        <div class="cp-row">
+          <i class="fas fa-flask cp-row-icon"></i>
+          <div class="cp-row-content">
+            <div class="cp-row-label">Business Type</div>
+            <div class="cp-row-value">Beverage Manufacturing & Distribution</div>
+          </div>
+        </div>
+        <div class="cp-row">
+          <i class="fas fa-users cp-row-icon"></i>
+          <div class="cp-row-content">
+            <div class="cp-row-label">Entity Type</div>
+            <div class="cp-row-value">Private Limited Company (Pvt. Ltd.)</div>
+          </div>
+        </div>
+        <div class="cp-row">
+          <i class="fas fa-industry cp-row-icon"></i>
+          <div class="cp-row-content">
+            <div class="cp-row-label">Products</div>
+            <div class="cp-row-value">Electrolyte Sports Drinks, Hydration Beverages</div>
+          </div>
+        </div>
+        <div class="cp-row">
+          <i class="fas fa-certificate cp-row-icon"></i>
+          <div class="cp-row-content">
+            <div class="cp-row-label">Licences Required</div>
+            <div class="cp-row-value">RJSC · Trade Licence · BSTI · BFSA · VAT · TIN</div>
+          </div>
+        </div>
+        <div class="cp-row">
+          <i class="fas fa-store cp-row-icon"></i>
+          <div class="cp-row-content">
+            <div class="cp-row-label">Market Reach</div>
+            <div class="cp-row-value">Gyms, Pharmacies, Supermarkets, Online D2C</div>
+          </div>
+        </div>
+        <div class="cp-desc-box">
+          <div class="cp-desc-text">Re‑Volt Beverage Ltd. manufactures and distributes premium electrolyte drinks across Bangladesh. The company operates under five core Bangladeshi business laws covering its entire lifecycle — from founder agreement to product sale and debt recovery.</div>
+        </div>
+        <div class="cp-stats-mini">
+          <div class="cp-stat-mini"><div class="cp-stat-val">5</div><div class="cp-stat-lbl">Laws Applied</div></div>
+          <div class="cp-stat-mini"><div class="cp-stat-val">BD</div><div class="cp-stat-lbl">Jurisdiction</div></div>
+          <div class="cp-stat-mini"><div class="cp-stat-val">Pvt</div><div class="cp-stat-lbl">Entity</div></div>
+        </div>
+        <div class="cp-laws-pills">
+          <span class="cp-law-pill" onclick="askLaw('partnership')">Partnership 1932</span>
+          <span class="cp-law-pill" onclick="askLaw('companies')">Companies 1994</span>
+          <span class="cp-law-pill" onclick="askLaw('contract')">Contract 1872</span>
+          <span class="cp-law-pill" onclick="askLaw('saleofgoods')">Sale of Goods 1930</span>
+          <span class="cp-law-pill" onclick="askLaw('niact')">NI Act 1881</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- LAW CARDS -->
+    <div class="sb-section">
+      <div class="sb-label"><i class="fas fa-book-open"></i> Bangladesh Business Laws</div>
+      <div class="law-card" onclick="askLaw('partnership')" id="card-partnership">
+        <span class="lc-icon">🤝</span>
+        <div class="lc-name">Partnership Act 1932</div>
+        <div class="lc-sub">Pre-incorporation · Founder Stage</div>
+        <div class="lc-desc">Re-Volt founders' rights, profit-sharing deed & joint liability before RJSC.</div>
+      </div>
+      <div class="law-card" onclick="askLaw('companies')" id="card-companies">
+        <span class="lc-icon">🏢</span>
+        <div class="lc-name">Companies Act 1994</div>
+        <div class="lc-sub">RJSC Registration · Private Limited</div>
+        <div class="lc-desc">Full incorporation of Re-Volt Beverage Ltd. as a Pvt. Ltd. company.</div>
+      </div>
+      <div class="law-card" onclick="askLaw('contract')" id="card-contract">
+        <span class="lc-icon">📝</span>
+        <div class="lc-name">Contract Act 1872</div>
+        <div class="lc-sub">Supply · Distribution · Retail</div>
+        <div class="lc-desc">Valid contracts with Re-Volt's suppliers, distributors & retailers.</div>
+      </div>
+      <div class="law-card" onclick="askLaw('saleofgoods')" id="card-saleofgoods">
+        <span class="lc-icon">🥤</span>
+        <div class="lc-name">Sale of Goods Act 1930</div>
+        <div class="lc-sub">Product Quality · Ownership Transfer</div>
+        <div class="lc-desc">Re-Volt's obligations on drink quality, delivery & consumer protection.</div>
+      </div>
+      <div class="law-card" onclick="askLaw('niact')" id="card-niact">
+        <span class="lc-icon">💳</span>
+        <div class="lc-name">NI Act 1881 · Sec. 138</div>
+        <div class="lc-sub">Cheque Dishonour · Criminal Recovery</div>
+        <div class="lc-desc">Full legal procedure when a distributor's cheque to Re-Volt bounces.</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CHAT MAIN -->
+  <main class="chat-main">
+    <div class="chat-subheader">
+      <div class="chat-tags">
+        <span class="chat-tag active">⚡ Re-Volt Legal AI</span>
+        <span class="chat-tag">🇧🇩 Bangladesh Law</span>
+        <span class="chat-tag">🤖 Claude Powered</span>
+        <span class="chat-tag">🔗 Verified Sources</span>
+      </div>
+      <div class="subhdr-right">
+        <div class="speak-pill" id="speakPill">
+          <div class="sw"><div class="sw-bar"></div><div class="sw-bar"></div><div class="sw-bar"></div></div>
+          Speaking…
+          <button onclick="stopSpeaking()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:0.68rem;padding:0 2px;"><i class="fas fa-stop-circle"></i></button>
+        </div>
+        <div class="topic-badge" id="topicBadge">Topic: <span style="color:var(--blue-light)">—</span></div>
+      </div>
+    </div>
+
+    <div class="messages" id="messagesDiv">
+      <div class="welcome-hero" id="welcomeHero">
+        <div class="welcome-icon">⚡</div>
+        <div class="welcome-title">Re‑Volt Legal AI</div>
+        <div class="welcome-subtitle">Official Legal Assistant · Re‑Volt Beverage Ltd.</div>
+        <div class="welcome-text">Expert AI-powered legal guidance for <strong>Re‑Volt Beverage Ltd.</strong> — Bangladesh's Premium Electrolyte Drink Company. Every answer includes verified law references and Google search links for authenticity.</div>
+        <div class="welcome-chips" id="welcomeChips">
+          <span class="welcome-chip" onclick="askLaw('partnership')">Partnership Act 1932</span>
+          <span class="welcome-chip" onclick="askLaw('companies')">Companies Act 1994</span>
+          <span class="welcome-chip" onclick="askLaw('contract')">Contract Act 1872</span>
+          <span class="welcome-chip" onclick="askLaw('saleofgoods')">Sale of Goods 1930</span>
+          <span class="welcome-chip" onclick="askLaw('niact')">NI Act Sec. 138</span>
+          <span class="welcome-chip" onclick="askChip('Tell me about Re-Volt Beverage Ltd. company profile')">Re-Volt Profile</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="chips-row" id="chipsRow">
+      <span class="chip" onclick="askChip(this.textContent)">Re-Volt partnership deed clauses</span>
+      <span class="chip" onclick="askChip(this.textContent)">RJSC registration step-by-step</span>
+      <span class="chip" onclick="askChip(this.textContent)">Distributor contract breach remedy</span>
+      <span class="chip" onclick="askChip(this.textContent)">Cheque bounce recovery Section 138</span>
+    </div>
+
+    <div class="voice-viz-bar" id="voiceVizBar">
+      <div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div>
+      <div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div>
+      <div class="v-bar"></div><div class="v-bar"></div>
+      <span class="v-bar-label" id="vBarLabel">🎙️ Listening…</span>
+    </div>
+
+    <div class="input-area">
+      <div class="input-box">
+        <textarea class="msg-input" id="msgInput" rows="1"
+          placeholder="Ask about Re‑Volt's legal matters — Partnership, RJSC registration, contracts, cheque recovery…"
+          maxlength="800" oninput="autoGrow(this)" onkeydown="handleKey(event)"></textarea>
+        <div class="input-btns">
+          <button class="mic-btn" id="micBtn" onclick="openVoiceModal()"><i class="fas fa-microphone"></i></button>
+          <button class="send-btn" id="sendBtn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+        </div>
+      </div>
+      <div class="input-footer">
+        <span id="charCount">0 / 800</span>
+        <span id="speakPillInline" class="speak-pill"></span>
+        <span>⚡ Re‑Volt Legal AI · Bangladesh Law · Powered by Claude · Sources Verified</span>
+      </div>
+    </div>
+  </main>
+
+  <!-- RIGHT SIDEBAR -->
+  <aside class="sidebar-right">
+    <div class="rv-hero">
+      <div class="rv-icon-big">⚡</div>
+      <div class="rv-company">Re‑Volt Beverage Ltd.</div>
+      <div class="rv-tagline">Premium Electrolyte Drink · Bangladesh</div>
+      <div class="rv-desc">AI Legal Assistant providing precise, example-rich guidance on Bangladeshi business law with verified source links.</div>
+    </div>
+    <div class="stats-grid" id="statsGrid">
+      <div class="stat-box"><div class="stat-val" id="msgCount">0</div><div class="stat-lbl">Messages</div></div>
+      <div class="stat-box"><div class="stat-val">5</div><div class="stat-lbl">Laws Covered</div></div>
+      <div class="stat-box"><div class="stat-val" id="sessionTime">0m</div><div class="stat-lbl">Session</div></div>
+      <div class="stat-box"><div class="stat-val">AI</div><div class="stat-lbl">Powered</div></div>
+    </div>
+    <div class="sb-section">
+      <div class="sb-label"><i class="fas fa-tools"></i> Legal Tools</div>
+      <button class="tool-btn" onclick="runTool('rjsc')"><i class="fas fa-building"></i><div><div>RJSC Registration Guide</div><div class="tool-desc">Step-by-step incorporation</div></div></button>
+      <button class="tool-btn" onclick="runTool('notice')"><i class="fas fa-file-alt"></i><div><div>Draft Legal Notice</div><div class="tool-desc">Cheque bounce / contract breach</div></div></button>
+      <button class="tool-btn" onclick="runTool('checklist')"><i class="fas fa-tasks"></i><div><div>Legal Compliance Checklist</div><div class="tool-desc">Registration / operations</div></div></button>
+      <button class="tool-btn" onclick="runTool('calculate')"><i class="fas fa-calculator"></i><div><div>Payment Recovery Calc</div><div class="tool-desc">Outstanding + interest</div></div></button>
+      <button class="tool-btn" onclick="runTool('bsti')"><i class="fas fa-certificate"></i><div><div>BSTI / BFSA Compliance</div><div class="tool-desc">Beverage licensing</div></div></button>
+      <div class="sb-div"></div>
+      <div class="sb-label"><i class="fas fa-question-circle"></i> Quick Queries</div>
+      <button class="tool-btn" onclick="askChip('What are Re-Volt director duties under Companies Act 1994 with examples?')"><i class="fas fa-user-tie"></i><div><div>Directors' Duties</div><div class="tool-desc">Companies Act 1994</div></div></button>
+      <button class="tool-btn" onclick="askChip('Consumer Rights Protection Act 2009 — how does it apply to Re-Volt drinks with real examples?')"><i class="fas fa-shield-alt"></i><div><div>Consumer Rights Act 2009</div><div class="tool-desc">Customer protection</div></div></button>
+      <button class="tool-btn" onclick="askChip('Artha Rin Adalat Ain 2003 — full procedure for Re-Volt to recover distributor debt')"><i class="fas fa-gavel"></i><div><div>Artha Rin Adalat</div><div class="tool-desc">Commercial debt recovery</div></div></button>
+      <div class="sb-div"></div>
+      <div class="sb-label"><i class="fab fa-google"></i> Verify Online</div>
+      <button class="tool-btn" onclick="window.open('https://www.google.com/search?q=Bangladesh+Companies+Act+1994+RJSC+registration','_blank')"><i class="fas fa-external-link-alt"></i><div><div>Google: Companies Act 1994</div><div class="tool-desc">Verify RJSC registration law</div></div></button>
+      <button class="tool-btn" onclick="window.open('https://www.google.com/search?q=Bangladesh+Negotiable+Instruments+Act+1881+Section+138+cheque+bounce','_blank')"><i class="fas fa-external-link-alt"></i><div><div>Google: NI Act Section 138</div><div class="tool-desc">Cheque bounce law Bangladesh</div></div></button>
+      <button class="tool-btn" onclick="window.open('https://roc.gov.bd','_blank')"><i class="fas fa-globe"></i><div><div>roc.gov.bd — RJSC Official</div><div class="tool-desc">Company registration portal</div></div></button>
+    </div>
+  </aside>
+</div>
+
+<!-- BOTTOMBAR -->
+<div class="bottombar">
+  <div class="bb-item"><i class="fas fa-bolt"></i> Re‑Volt Legal AI v3.0</div>
+  <div class="bb-item"><i class="fas fa-map-marker-alt"></i> Bangladesh</div>
+  <div class="bb-center">⚡ Re‑Volt Beverage Ltd. · Official AI Legal Assistant · Not a substitute for professional legal advice</div>
+  <div class="bb-item" id="sessionMsgsLbl"><i class="fas fa-comments"></i> 0 messages</div>
+  <div class="bb-item"><i class="fas fa-lock"></i> Secure</div>
+</div>
+
+<script>
+'use strict';
+let conversation=[], msgCount=0, isTyping=false, autoSpeak=false, recognition=null, isRecording=false, voiceTranscript='';
+const synth=window.speechSynthesis||null;
+const sessionStart=Date.now();
+
+const SYSTEM_PROMPT=`You are Re-Volt Legal AI — the official AI legal assistant of Re-Volt Beverage Ltd., a Premium Electrolyte Drink Company based in Bangladesh.
+
+COMPANY PROFILE:
+- Company: Re-Volt Beverage Ltd. (Private Limited)
+- Type: Beverage Manufacturing & Distribution
+- Products: Premium Electrolyte Sports Drinks and Hydration Beverages
+- Location: Dhaka, Bangladesh
+- Registered under: Companies Act 1994 with RJSC
+- Key licences: Trade Licence, TIN, VAT, BSTI Licence, BFSA Food Safety Certificate
+- Market: Gyms, pharmacies, supermarkets, online D2C across Bangladesh
+- Founders: Started as a partnership, converted to Private Limited company
+
+YOUR ROLE: Provide precise, example-rich legal guidance for Re-Volt Beverage Ltd. under Bangladeshi business law. Always tie legal principles to REAL, SPECIFIC Re-Volt scenarios.
+
+RESPONSE FORMAT RULES:
+1. Start with: <div class="rv-tag"><i class="fas fa-bolt"></i> Re-Volt Beverage Ltd. · [Exact Law Name]</div>
+2. Use **bold** for key terms, section numbers, and law names
+3. Use step-list HTML for procedures
+4. Use example-box for real Re-Volt scenarios: <div class="example-box"><div class="ex-label">📌 Re-Volt Example</div>content</div>
+5. Use alert-box for warnings/critical points
+6. Use info-box for important facts: <div class="info-box"><i class="fas fa-info-circle"></i> content</div>
+7. Use success-box for remedies/solutions: <div class="success-box"><i class="fas fa-check-circle"></i> content</div>
+8. END every response with a verify-section containing 3-4 Google search links:
+   <div class="verify-section">
+   <div class="verify-label"><i class="fab fa-google"></i> Verify These Laws Online</div>
+   <div class="verify-links">
+   <a class="verify-link" href="https://www.google.com/search?q=..." target="_blank"><div class="g-dot"></div>Search Term</a>
+   </div>
+   </div>
+9. Always mention exact section numbers, fees in BDT (৳), official websites, and timelines
+10. Provide 2-3 concrete Re-Volt-specific examples per law
+
+PRECISE LAW KNOWLEDGE:
+
+PARTNERSHIP ACT 1932 for Re-Volt:
+- Section 4: Partnership definition — Re-Volt founders carrying on business together to share profits
+- Section 13: Rights of partners — to share profits as per deed
+- Section 25: Joint & several liability — EACH Re-Volt founder personally liable for ALL firm debts (e.g. if Re-Volt buys ৳5 lakh raw material on credit and firm cannot pay, each founder personally liable for full ৳5 lakh)
+- Section 37: Rights after dissolution
+- Section 58: Registration (optional but strongly recommended) — unregistered firm disadvantages
+- Section 69: CRITICAL — unregistered firm CANNOT file suit to enforce rights against third parties (e.g. if Re-Volt is unregistered and a supplier refuses delivery, Re-Volt cannot sue to enforce the contract)
+- Partnership deed must include: firm name, business address, capital contribution per partner, profit/loss ratio, duration, withdrawal rules, bank account operation, dispute resolution, dissolution & conversion clause
+- Example: 3 founders — Rahim (40%), Karim (35%), Hasan (25%) — written deed protects all
+
+COMPANIES ACT 1994 for Re-Volt:
+- Section 1: Application — Re-Volt Beverage Ltd. registered as private limited
+- Section 11: Minimum 2 directors, 2 shareholders for private company
+- Section 18: Certificate of Incorporation gives Re-Volt separate legal identity
+- Section 24: MOA — objects clause must specifically mention "manufacturing, processing, distributing and selling beverage and electrolyte drinks"
+- Section 79: Share transfer restrictions in private company
+- Section 85: Annual General Meeting within 18 months of incorporation
+- Section 107: Directors' fiduciary duties
+- Section 121: Filing of annual return within 42 days of AGM
+- Required documents: MOA, AOA, Form IX (Director consent), Form XII (Director particulars), Treasury Challan for stamp duty
+- Post-incorporation mandatory: Trade Licence (City Corp), TIN (incometax.gov.bd), VAT (if >৳30 lakh turnover), BSTI Licence (MANDATORY for beverage), BFSA certificate (food safety)
+- Name clearance fee: ৳200 | Stamp duty: 0.1% of authorized capital | Filing fee: ৳1,000–৳5,000
+- Timeline: 5–10 working days via roc.gov.bd
+
+CONTRACT ACT 1872 for Re-Volt:
+- Section 2(h): Valid contract = enforceable by law
+- Section 10: Essentials — lawful offer + acceptance + consideration + free consent + lawful object + capacity
+- Section 13-22: Free consent — no coercion, undue influence, fraud, misrepresentation (e.g. if Re-Volt's distributor was pressured to sign unfair exclusivity, contract is voidable)
+- Section 27: Agreement in restraint of trade VOID — Re-Volt cannot bind distributors from EVER selling any drink; territorial exclusivity is valid but total business restraint is not
+- Section 55: Time being essence — if Re-Volt agrees to supply by Eid and delays, buyer can repudiate
+- Section 56: Frustrated contracts — COVID lockdown prevented Re-Volt delivery = contract may be frustrated
+- Section 73: Damages for breach — Re-Volt can claim: (a) actual loss, (b) consequential loss it knew about, (c) cost of alternate supplier, (d) 15% annual interest
+- Section 74: Liquidated damages / penalty clauses valid in Bangladesh
+- Limitation period: 3 years from date of breach (Limitation Act 1908)
+- Example distributor contract must have: territory, monthly minimum offtake (e.g. ৳2 lakh/month), payment terms (e.g. 30-day credit), return policy (max 5% damaged goods), force majeure, BIAC arbitration clause
+
+SALE OF GOODS ACT 1930 for Re-Volt:
+- Section 4: Contract of sale — Re-Volt transfers property in electrolyte drinks for price
+- Section 12-17: Conditions and warranties
+- Section 14: Implied condition of title — Re-Volt must own its product formula/branding
+- Section 15: Sale by description — if Re-Volt labels "100ml, Mango flavour, 250mg sodium" — delivered goods must exactly match
+- Section 16(1): Fitness for purpose — gym orders Re-Volt for post-workout rehydration; Re-Volt knows this; drinks MUST be fit for that purpose
+- Section 16(2): Merchantable quality — Re-Volt drinks must be free from contamination, within expiry, sealed properly; leaking bottles = breach
+- Section 17: Sale by sample — bulk supply must match sample in taste, colour, pH, packaging
+- Section 23: Property passes on unconditional appropriation — when Re-Volt puts goods aside for specific buyer
+- Section 47: Lien — if distributor owes ৳3 lakh, Re-Volt can withhold further supplies
+- Section 50: Stoppage in transit — if distributor goes insolvent mid-delivery, Re-Volt can instruct transporter to return stock
+- Section 55: Action for price — sue for full invoice amount once property has passed
+- Section 57: Damages for non-acceptance — if buyer refuses to accept 500 cases of Re-Volt, sue for lost profit
+- Consumer Rights Protection Act 2009: Re-Volt must display price, not sell expired goods, not mislabel ingredients
+
+NEGOTIABLE INSTRUMENTS ACT 1881 — SECTION 138 for Re-Volt:
+Complete 5-step procedure with EXACT deadlines:
+Step 1: Cheque presented → Bank returns with memo (reasons: "insufficient funds", "account closed", "payment stopped")
+Step 2: WITHIN 30 DAYS of receiving memo — Re-Volt sends registered legal notice to distributor demanding payment within 15 days
+Step 3: If distributor pays within 15 days → matter resolved. If NOT paid:
+Step 4: WITHIN 30 DAYS of notice expiry → Re-Volt files criminal complaint in Chief Metropolitan Magistrate Court (for Dhaka) where Re-Volt's bank is located
+Step 5: Trial → Conviction: up to 2 years imprisonment OR fine up to TWICE cheque amount OR both
+- Example: Distributor issues cheque for ৳5,00,000 (5 lakh). Cheque bounces. Notice period expires without payment. Re-Volt files complaint. Court can order ৳10,00,000 fine + imprisonment
+- Parallel remedy: Artha Rin Adalat Ain 2003 for amounts ৳10 lakh+ (faster commercial court)
+- Can also file civil suit for recovery simultaneously
+- Compounding: Section 320 CrPC allows settlement even after filing — distributor pays + costs
+
+ADDITIONAL LAWS:
+- BSTI Ordinance 1985: mandatory standardization certificate for Re-Volt drinks
+- Bangladesh Food Safety Authority Act 2013 (BFSA): food production licence mandatory
+- Income Tax Ordinance 1984: Re-Volt pays corporate tax at 25% (if listed) or 30% (if not listed)
+- VAT Act 1991: 15% VAT on sales above ৳30 lakh threshold
+- Artha Rin Adalat Ain 2003: commercial debt recovery court for ৳10 lakh+ claims
+- Consumer Rights Protection Act 2009: DNCRP enforcement, fines up to ৳2 lakh for violations
+- Labour Act 2006: Re-Volt's employees protected, factory compliance required
+
+RESPONSE QUALITY STANDARDS:
+- Always give 2-3 Re-Volt-specific examples with ৳ amounts and realistic scenarios
+- Include exact section numbers for every legal point
+- Mention government websites: roc.gov.bd, bsti.gov.bd, bfsa.gov.bd, nbr.gov.bd, incometax.gov.bd
+- End with 3-4 Google verification links relevant to the specific law asked
+- Be precise, professional, and thorough`;
+
+const $=id=>document.getElementById(id);
+function showToast(msg,type='success'){const t=$('toast'),ic=$('toastIcon');t.className='toast'+(type==='warn'?' warn':type==='error'?' error':'');ic.className=type==='warn'?'fas fa-exclamation-triangle':type==='error'?'fas fa-times-circle':'fas fa-check-circle';$('toastMsg').textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+function setStatus(txt,dot='var(--green)'){$('statusLabel').textContent=txt;document.querySelector('.status-dot').style.background=dot;document.querySelector('.status-dot').style.boxShadow=`0 0 10px ${dot}`;}
+function updateMsgCount(){const c=conversation.length;$('msgCount').textContent=c;$('sessionMsgsLbl').textContent=c+' messages';}
+function updateSessionTime(){const mins=Math.floor((Date.now()-sessionStart)/60000);$('sessionTime').textContent=mins+'m';}
+setInterval(updateSessionTime,30000);
+function updateTopicBadge(t){$('topicBadge').innerHTML=`Topic: <span style="color:var(--blue-light)">${t}</span>`;}
+function autoGrow(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,100)+'px';$('charCount').textContent=el.value.length+' / 800';}
+function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}}
+function toggleTheme(){const h=document.documentElement,isDark=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',isDark?'light':'dark');$('themeIcon').className=isDark?'fas fa-moon':'fas fa-sun';showToast(isDark?'☀️ Light mode':'🌙 Dark mode');}
+
+function addMsg(content,role,stream=false){
+  $('welcomeHero')?.remove();
+  const wrap=document.createElement('div');
+  wrap.className=`msg-wrap ${role}`;
+  const now=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  const sender=role==='user'?'👤 You':'⚡ Re‑Volt Legal AI';
+  let actHTML=role==='ai'?`<div class="msg-actions"><button class="act-btn" onclick="copyMsg(this)"><i class="fas fa-copy"></i> Copy</button><button class="act-btn" onclick="speakMsg(this)"><i class="fas fa-volume-up"></i> Speak</button></div>`:`<div class="msg-actions"><button class="act-btn" onclick="copyMsg(this)"><i class="fas fa-copy"></i> Copy</button></div>`;
+  const bubbleId='bubble_'+Date.now()+Math.random().toString(36).slice(2);
+  wrap.innerHTML=`<div class="msg-meta">${sender} · ${now}</div><div class="msg-bubble${stream?' streaming-cursor':''}" id="${bubbleId}">${processMarkdown(content)}</div>${actHTML}`;
+  $('messagesDiv').appendChild(wrap);
+  wrap.scrollIntoView({behavior:'smooth',block:'end'});
+  if(role==='user')updateMsgCount();
+  return bubbleId;
+}
+
+function processMarkdown(t){
+  t=t.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
+  t=t.replace(/\n\n/g,'</p><p style="margin-top:8px">');
+  t=t.replace(/\n/g,'<br>');
+  return t;
+}
+
+function copyMsg(btn){const b=btn.closest('.msg-wrap').querySelector('.msg-bubble');navigator.clipboard.writeText(b.innerText).then(()=>{showToast('Copied!');btn.innerHTML='<i class="fas fa-check"></i> Copied';setTimeout(()=>{btn.innerHTML='<i class="fas fa-copy"></i> Copy';},2000);});}
+function speakMsg(btn){const b=btn.closest('.msg-wrap').querySelector('.msg-bubble'),t=b.innerText.replace(/\s+/g,' ').trim().substring(0,800);if(!synth){showToast('TTS not supported','warn');return;}synth.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=0.88;u.pitch=1.0;const v=synth.getVoices(),pv=v.find(x=>x.name.includes('Daniel')||x.name.includes('Google UK')||x.name.includes('Alex'));if(pv)u.voice=pv;u.onstart=()=>{$('speakPill').classList.add('on');btn.classList.add('speaking');};u.onend=u.onerror=()=>{$('speakPill').classList.remove('on');btn.classList.remove('speaking');};synth.speak(u);showToast('🔊 Speaking…');}
+function stopSpeaking(){if(synth)synth.cancel();$('speakPill').classList.remove('on');}
+function toggleAutoSpeak(){autoSpeak=!autoSpeak;$('autoSpeakBtn').classList.toggle('active',autoSpeak);showToast(autoSpeak?'🔊 Auto-speak ON':'🔇 Auto-speak OFF');}
+function showTyping(){const w=document.createElement('div');w.className='msg-wrap ai typing-wrap';w.id='typingIndicator';w.innerHTML=`<div class="msg-meta">⚡ Re‑Volt Legal AI · Analysing…</div><div class="typing-bubble"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div><span class="typing-label">Processing your legal query…</span></div>`;$('messagesDiv').appendChild(w);w.scrollIntoView({behavior:'smooth',block:'end'});}
+function hideTyping(){$('typingIndicator')?.remove();}
+
+async function sendMessage(){
+  const input=$('msgInput'),txt=input.value.trim();
+  if(!txt||isTyping)return;
+  addMsg(txt,'user');
+  conversation.push({role:'user',content:txt});
+  input.value='';input.style.height='auto';$('charCount').textContent='0 / 800';
+  $('sendBtn').disabled=true;isTyping=true;
+  setStatus('⚡ Analysing legal query…','#ffc800');
+  showTyping();
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:SYSTEM_PROMPT,messages:conversation.slice(-20)})});
+    const data=await resp.json();
+    hideTyping();
+    if(data.content&&data.content[0]){
+      const reply=data.content[0].text;
+      const bId=addMsg(reply,'ai');
+      document.getElementById(bId)?.classList.remove('streaming-cursor');
+      conversation.push({role:'assistant',content:reply});
+      updateMsgCount();updateTopicBadge(detectTopic(txt));updateChips(txt);highlightLawCard(txt);
+      if(autoSpeak){setTimeout(()=>{const btn=document.getElementById(bId)?.parentElement?.querySelector('.act-btn:last-child');if(btn)speakMsg(btn);},500);}
+      saveHistory();
+    }else if(data.error){addMsg(`<div class="alert-box"><i class="fas fa-exclamation-triangle"></i> <strong>Error:</strong> ${data.error.message||'Unknown'}. Please retry.</div>`,'ai');}
+  }catch(err){
+    hideTyping();
+    const loc=getLocalReply(txt);
+    addMsg(loc.reply,'ai');
+    conversation.push({role:'assistant',content:loc.reply});
+    updateMsgCount();updateTopicBadge(loc.topic);updateChips(txt,loc.chips);highlightLawCard(txt);saveHistory();
+  }finally{isTyping=false;$('sendBtn').disabled=false;setStatus('Re‑Volt Legal AI — Ready','var(--green)');}
+}
+
+function detectTopic(q){const l=q.toLowerCase();if(l.includes('partner')||l.includes('founder')||l.includes('deed'))return'Partnership Act 1932';if(l.includes('compan')||l.includes('rjsc')||l.includes('incorporat'))return'Companies Act 1994';if(l.includes('contract')||l.includes('supplier')||l.includes('distribut'))return'Contract Act 1872';if(l.includes('sale')||l.includes('goods')||l.includes('quality')||l.includes('drink'))return'Sale of Goods 1930';if(l.includes('cheque')||l.includes('bounce')||l.includes('138')||l.includes('dishon'))return'NI Act 1881 · Sec.138';return'Bangladesh Business Law';}
+function highlightLawCard(q){const l=q.toLowerCase();document.querySelectorAll('.law-card').forEach(c=>c.classList.remove('active-card'));if(l.includes('partner')||l.includes('founder'))$('card-partnership')?.classList.add('active-card');else if(l.includes('compan')||l.includes('rjsc'))$('card-companies')?.classList.add('active-card');else if(l.includes('contract')||l.includes('supplier'))$('card-contract')?.classList.add('active-card');else if(l.includes('sale')||l.includes('goods')||l.includes('drink'))$('card-saleofgoods')?.classList.add('active-card');else if(l.includes('cheque')||l.includes('138'))$('card-niact')?.classList.add('active-card');}
+function updateChips(q,custom){
+  const l=q.toLowerCase();
+  let chips=custom;
+  if(!chips){
+    if(l.includes('partner')||l.includes('deed'))chips=['Convert Re-Volt to Pvt Ltd','Section 25 joint liability example','Section 69 unregistered firm risk','Partnership deed essential clauses'];
+    else if(l.includes('compan')||l.includes('rjsc'))chips=['BSTI licence beverage company','BFSA food safety certificate','Director duties Section 107','Annual return 42-day rule'];
+    else if(l.includes('contract')||l.includes('supplier'))chips=['Section 73 breach damages calculation','Distribution agreement exclusivity','Force majeure COVID example','BIAC arbitration Bangladesh'];
+    else if(l.includes('sale')||l.includes('goods')||l.includes('drink'))chips=['Section 16 merchantable quality','Unpaid seller lien Section 47','Stoppage in transit Section 50','Consumer Rights Act 2009'];
+    else if(l.includes('cheque')||l.includes('138'))chips=['30-day notice format','Artha Rin Adalat ৳10 lakh+','Section 138 criminal penalty','Civil suit parallel to 138'];
+    else chips=['Re-Volt partnership deed clauses','RJSC registration full guide','Distributor contract breach','Cheque bounce Section 138'];
+  }
+  const row=$('chipsRow');row.innerHTML='';
+  chips.forEach(c=>{const s=document.createElement('span');s.className='chip';s.textContent=c;s.onclick=()=>askChip(c);row.appendChild(s);});
+}
+
+function askChip(q){$('msgInput').value=q;autoGrow($('msgInput'));sendMessage();}
+function askLaw(law){
+  const q={
+    partnership:'Explain the Partnership Act 1932 as it applies to Re-Volt Beverage Ltd. — cover Section 4 (definition), Section 25 (joint & several liability with a real Re-Volt money example), Section 58 (registration), Section 69 (court bar for unregistered firm), and all clauses a Re-Volt partnership deed must contain. Include specific examples with ৳ amounts.',
+    companies:'Explain how Re-Volt Beverage Ltd. should register under the Companies Act 1994 with RJSC — give the complete step-by-step process with fees in ৳, all required forms (MOA, AOA, Form IX, Form XII), timeline, and all post-registration licences (BSTI, BFSA, VAT, TIN, Trade Licence) with official websites.',
+    contract:'Explain the Contract Act 1872 as it applies to Re-Volt Beverage Ltd. — cover all essential elements, Re-Volt\'s three key contracts (supplier, distributor, retail), real examples of breach with ৳ damages under Section 73, time essence clause, frustration, and dispute resolution. Include specific Re-Volt scenarios.',
+    saleofgoods:'Explain the Sale of Goods Act 1930 as it applies to Re-Volt Beverage Ltd. — cover all implied conditions (Sections 14-17) with real drink quality examples, when property passes, all three unpaid seller rights (lien, stoppage in transit, sue for price) with ৳ examples, and Consumer Rights Protection Act 2009 obligations.',
+    niact:'A Re-Volt Beverage Ltd. distributor\'s cheque for ৳5,00,000 was dishonoured. Explain the complete Section 138 NI Act 1881 procedure — give exact deadlines (30 days, 15 days, 30 days), what the legal notice must say, which court to file in, criminal penalties (imprisonment + fine amount), and parallel Artha Rin Adalat option.'
+  };
+  askChip(q[law]||`Explain ${law} for Re-Volt Beverage Ltd.`);
+}
+
+function runTool(tool){
+  const p={rjsc:'Give me the complete RJSC registration guide for Re-Volt Beverage Ltd. under Companies Act 1994 — include name clearance (৳200 fee), all documents required, stamp duty formula for ৳10 lakh capital, government filing fees, the official roc.gov.bd website, and exactly what BSTI and BFSA licences a beverage company needs.',bsti:'What BSTI licence and BFSA food safety certificate does Re-Volt Beverage Ltd. need? Give application procedure, all required documents, fees, timeline, and official websites bsti.gov.bd and bfsa.gov.bd.'};
+  if(p[tool]){askChip(p[tool]);return;}
+  if(tool==='notice'){const m=prompt('Draft legal notice for: (e.g. cheque bounce ৳5 lakh, contract breach, non-payment)');if(m)askChip(`Draft the full legal notice structure for Re-Volt Beverage Ltd. for "${m}" under Bangladesh law — include all mandatory elements, correct legal language, proper format, timeline requirements, and which law sections apply.`);}
+  else if(tool==='checklist'){const i=prompt('Checklist for: (e.g. company registration, cheque bounce, supplier contract)');if(i)askChip(`Provide a complete legal checklist for Re-Volt Beverage Ltd. for: ${i}. Include all steps, documents needed, timelines, fees in ৳, relevant Bangladesh law sections, and official websites.`);}
+  else if(tool==='calculate'){const a=prompt('Outstanding amount (৳):'),m=prompt('Months since default:');if(a&&m)askChip(`Re-Volt Beverage Ltd. has ৳${a} outstanding for ${m} months. Calculate total recoverable amount: principal + 15% commercial interest per annum + estimated court fees + legal costs. Show the full calculation. Also advise whether to use Section 138 NI Act or Artha Rin Adalat based on the amount.`);}
+}
+
+// ===== VOICE =====
+function openVoiceModal(){if(!('webkitSpeechRecognition'in window||'SpeechRecognition'in window)){showToast('⚠️ Voice not supported. Use Chrome / Edge.','warn');return;}voiceTranscript='';$('vmTranscript').textContent='Your question will appear here…';$('vmStatus').textContent='Tap the orb to start speaking';$('vmOrb').className='vm-orb';$('vmOrb').textContent='🎙️';$('voiceModal').classList.add('open');}
+function closeVoiceModal(){stopRecording();$('voiceModal').classList.remove('open');}
+function clearVoiceTranscript(){voiceTranscript='';$('vmTranscript').textContent='Your question will appear here…';$('vmStatus').textContent='Tap the orb to start speaking';}
+function toggleRecording(){isRecording?stopRecording():startRecording();}
+function startRecording(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;recognition=new SR();recognition.continuous=false;recognition.interimResults=true;recognition.lang='en-US';isRecording=true;$('vmOrb').className='vm-orb active';$('vmOrb').textContent='🔴';$('vmStatus').textContent='🎙️ Listening… ask your legal question';$('micBtn').classList.add('recording');$('voiceVizBar').classList.add('active');setStatus('🎙️ Recording…','#ff5555');recognition.onresult=e=>{let fin='',int='';for(let i=e.resultIndex;i<e.results.length;i++){if(e.results[i].isFinal)fin+=e.results[i][0].transcript;else int+=e.results[i][0].transcript;}voiceTranscript=fin||int;$('vmTranscript').textContent=voiceTranscript||'Listening…';};recognition.onend=()=>{isRecording=false;$('vmOrb').className='vm-orb';$('vmOrb').textContent='🎙️';$('micBtn').classList.remove('recording');$('voiceVizBar').classList.remove('active');setStatus('Re‑Volt Legal AI — Ready','var(--green)');$('vmStatus').textContent=voiceTranscript?'✅ Got it! Click Send.':'⚠️ No speech detected. Try again.';};recognition.onerror=e=>{isRecording=false;$('vmOrb').className='vm-orb';$('vmOrb').textContent='🎙️';$('micBtn').classList.remove('recording');$('voiceVizBar').classList.remove('active');const m=e.error==='not-allowed'?'Mic permission denied':'Voice error: '+e.error;$('vmStatus').textContent='⚠️ '+m;showToast(m,'warn');setStatus('Re‑Volt Legal AI — Ready','var(--green)');};recognition.start();}
+function stopRecording(){if(recognition&&isRecording){recognition.stop();isRecording=false;}$('micBtn').classList.remove('recording');$('voiceVizBar').classList.remove('active');}
+function sendVoice(){if(!voiceTranscript.trim()){$('vmStatus').textContent='⚠️ No speech. Click orb first.';return;}closeVoiceModal();$('msgInput').value=voiceTranscript;autoGrow($('msgInput'));sendMessage();voiceTranscript='';}
+
+function exportChat(){
+  if(!conversation.length){showToast('No messages','warn');return;}
+  let t=`RE‑VOLT LEGAL AI v3.0 — Legal Consultation Record\n${'='.repeat(60)}\nCompany: Re‑Volt Beverage Ltd. (Premium Electrolyte Drink)\nJurisdiction: Bangladesh\nDate: ${new Date().toLocaleDateString()}\nTime: ${new Date().toLocaleTimeString()}\n\n`;
+  conversation.forEach(m=>{t+=`[${m.role==='user'?'You':'Re‑Volt Legal AI'}]:\n${m.content.replace(/<[^>]*>/g,'')}\n${'─'.repeat(50)}\n\n`;});
+  t+=`\n[DISCLAIMER: For informational purposes only. Consult a qualified Bangladesh lawyer for specific legal matters.]\n[Sources can be verified at: roc.gov.bd | bsti.gov.bd | bfsa.gov.bd | nbr.gov.bd]\n`;
+  const blob=new Blob([t],{type:'text/plain'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download=`revolt-legal-${Date.now()}.txt`;a.click();URL.revokeObjectURL(url);
+  showToast('✅ Consultation exported');
+}
+
+function clearAll(){
+  if(conversation.length&&!confirm('Clear entire conversation?'))return;
+  conversation=[];msgCount=0;
+  $('messagesDiv').innerHTML=`<div class="welcome-hero" id="welcomeHero"><div class="welcome-icon">⚡</div><div class="welcome-title">Re‑Volt Legal AI</div><div class="welcome-subtitle">Official Legal Assistant · Re‑Volt Beverage Ltd.</div><div class="welcome-text">Expert AI-powered legal guidance for <strong>Re‑Volt Beverage Ltd.</strong> — Bangladesh's Premium Electrolyte Drink Company.</div><div class="welcome-chips"><span class="welcome-chip" onclick="askLaw('partnership')">Partnership Act 1932</span><span class="welcome-chip" onclick="askLaw('companies')">Companies Act 1994</span><span class="welcome-chip" onclick="askLaw('contract')">Contract Act 1872</span><span class="welcome-chip" onclick="askLaw('saleofgoods')">Sale of Goods 1930</span><span class="welcome-chip" onclick="askLaw('niact')">NI Act Sec. 138</span><span class="welcome-chip" onclick="askChip('Tell me about Re-Volt Beverage Ltd. company')">Re-Volt Profile</span></div></div>`;
+  $('msgCount').textContent='0';$('sessionMsgsLbl').textContent='0 messages';updateTopicBadge('—');
+  localStorage.removeItem('revolt_legal_v3');
+  updateChips('',['Re-Volt partnership deed','RJSC registration guide','Distributor contract breach','Cheque bounce Sec. 138']);
+  showToast('Conversation cleared');
+}
+
+// ===== LOCAL FALLBACK =====
+function getLocalReply(q){
+  const l=q.toLowerCase();
+  const gLink=(term,label)=>`<a class="verify-link" href="https://www.google.com/search?q=${encodeURIComponent(term)}" target="_blank"><div class="g-dot"></div>${label}</a>`;
+
+  if(l.includes('profile')||l.includes('about revolt')||l.includes('company')||l.includes('who is revolt')){
+    return{topic:'Company Profile',chips:['Partnership Act 1932 for Re-Volt','RJSC company registration','Re-Volt product liability','BSTI beverage licence'],reply:`
+<div class="rv-tag"><i class="fas fa-bolt"></i> Re-Volt Beverage Ltd. · Company Profile</div>
+<strong>Re‑Volt Beverage Ltd. — Company Overview</strong>
+<div class="step-list">
+<div class="step-item"><div class="step-num">🏢</div><div><strong>Legal Name:</strong> Re‑Volt Beverage Limited (Private Limited Company)<br><strong>Type:</strong> Private Limited Company under Companies Act 1994<br><strong>Registered with:</strong> RJSC (Registrar of Joint Stock Companies & Firms), Bangladesh</div></div>
+<div class="step-item"><div class="step-num">🥤</div><div><strong>Business:</strong> Manufacturing, processing, and distribution of <strong>Premium Electrolyte Sports Drinks & Hydration Beverages</strong> across Bangladesh<br><strong>Target Markets:</strong> Gyms, pharmacies, supermarkets, hospitals, schools, and online D2C channels</div></div>
+<div class="step-item"><div class="step-num">📍</div><div><strong>Headquarters:</strong> Dhaka, Bangladesh<br><strong>Operations:</strong> Production facility + distribution network across major cities</div></div>
+<div class="step-item"><div class="step-num">📋</div><div><strong>Mandatory Licences for Re‑Volt:</strong><br>✅ RJSC Certificate of Incorporation<br>✅ Trade Licence (City Corporation)<br>✅ TIN — Tax Identification Number (NBR)<br>✅ VAT Registration (if turnover &gt; ৳30 lakh)<br>✅ <strong>BSTI Licence</strong> (mandatory for all beverage companies — bsti.gov.bd)<br>✅ <strong>BFSA Food Safety Certificate</strong> (bfsa.gov.bd)<br>✅ Factory Licence (under Labour Act 2006)</div></div>
+</div>
+<strong>5 Core Laws Governing Re‑Volt Beverage Ltd.:</strong>
+<div class="step-list">
+<div class="step-item"><div class="step-num">1</div><div><strong>Partnership Act 1932</strong> — Governed Re-Volt's initial founder stage before RJSC incorporation. Defined profit-sharing, duties, and personal liabilities of founders.</div></div>
+<div class="step-item"><div class="step-num">2</div><div><strong>Companies Act 1994</strong> — Re-Volt's current governing law as a registered Private Limited company. Covers incorporation, directors' duties, share structure, and annual compliance.</div></div>
+<div class="step-item"><div class="step-num">3</div><div><strong>Contract Act 1872</strong> — Governs ALL of Re-Volt's commercial agreements: raw material supply, distribution, retail, and employment contracts.</div></div>
+<div class="step-item"><div class="step-num">4</div><div><strong>Sale of Goods Act 1930</strong> — Governs Re-Volt's obligations when selling its electrolyte drinks: product quality, ownership transfer, and buyer/seller remedies.</div></div>
+<div class="step-item"><div class="step-num">5</div><div><strong>NI Act 1881 (Section 138)</strong> — Protects Re-Volt when distributors issue cheques that bounce; provides criminal and civil recovery.</div></div>
+</div>
+<div class="verify-section"><div class="verify-label"><i class="fab fa-google"></i> Verify Re‑Volt's Legal Framework</div><div class="verify-links">${gLink('Bangladesh Companies Act 1994 private limited company RJSC','Companies Act 1994')}${gLink('BSTI licence beverage company Bangladesh','BSTI Beverage Licence')}${gLink('BFSA Bangladesh Food Safety Authority food production licence','BFSA Food Safety')}${gLink('Bangladesh business laws startup company','BD Business Laws')}</div></div>`};
+  }
+
+  if(l.includes('partner')||l.includes('founder')||l.includes('deed')||l.includes('profit shar')){
+    return{topic:'Partnership Act 1932',chips:['Convert Re-Volt to Pvt Ltd','Section 25 liability example','RJSC registration steps','Section 69 unregistered risk'],reply:`
+<div class="rv-tag"><i class="fas fa-bolt"></i> Re-Volt Beverage Ltd. · Partnership Act 1932</div>
+<strong>Partnership Act 1932 — Re‑Volt's Founding Stage</strong>
+At the initial stage, <strong>Re‑Volt Beverage Ltd. may operate as a partnership</strong> under the Partnership Act 1932 if two or more founders agree to share profits before formal RJSC registration. A written <strong>partnership deed</strong> is the founding document.
+<div class="example-box"><div class="ex-label">📌 Re-Volt Real Example</div>Suppose Re-Volt has 3 founders: Rahim (40%), Karim (35%), Hasan (25%). Without a written deed, profits and management disputes will be resolved by Act defaults — which may not reflect what founders actually agreed. A written deed prevents expensive litigation later.</div>
+<strong>Partnership Deed — Essential Clauses for Re‑Volt:</strong>
+<div class="step-list">
+<div class="step-item"><div class="step-num">1</div><div><strong>Business Name & Objectives (Section 4)</strong> — "Re-Volt Beverage" as firm name. Purpose: manufacture, distribute, and sell premium electrolyte drinks in Bangladesh.</div></div>
+<div class="step-item"><div class="step-num">2</div><div><strong>Profit & Loss Ratio</strong> — Rahim: 40%, Karim: 35%, Hasan: 25%. Specify that losses are shared in the same ratio. Prevents disputes during bad months.</div></div>
+<div class="step-item"><div class="step-num">3</div><div><strong>Capital Contribution</strong> — Rahim: ৳5,00,000 | Karim: ৳4,37,500 | Hasan: ৳3,12,500. Total initial capital: ৳12,50,000. Specifying this prevents "I invested more" disputes.</div></div>
+<div class="step-item"><div class="step-num">4</div><div><strong>Management & Duties</strong> — Rahim: Production & Operations; Karim: Sales & Distribution; Hasan: Finance & Compliance. Prevents role confusion.</div></div>
+<div class="step-item"><div class="step-num">5</div><div><strong>Dissolution & Conversion Clause</strong> — "The partnership shall be converted to a private limited company under Companies Act 1994 upon RJSC registration, at which point this deed becomes void." This ensures smooth corporate transition.</div></div>
+</div>
+<div class="alert-box"><i class="fas fa-exclamation-triangle"></i> <strong>Section 25 — Joint & Several Liability (CRITICAL for Re‑Volt):</strong> Every partner is personally liable for ALL firm debts. Example: If Re-Volt buys ৳10,00,000 of raw materials (electrolyte powder, bottles) on credit from a supplier and the firm cannot pay — the supplier can recover the FULL ৳10 lakh from Rahim alone, even though Rahim only owns 40%. This unlimited personal liability is the #1 reason to incorporate quickly.</div>
+<div class="alert-box"><i class="fas fa-exclamation-triangle"></i> <strong>Section 69 — Unregistered Firm Cannot Sue:</strong> If Re‑Volt's partnership is NOT registered under Section 58, Re-Volt CANNOT file a court case to enforce any contract right. Example: If a gym chain owes Re-Volt ৳3 lakh for drinks and refuses to pay, an unregistered Re-Volt firm cannot sue to recover it.</div>
+<div class="success-box"><i class="fas fa-check-circle"></i> <strong>Re‑Volt Recommendation:</strong> Register the partnership deed with the Sub-Registrar's office (stamp duty: ৳1,000–৳2,000) AND simultaneously file for RJSC company registration. Convert to Private Limited company as soon as possible to eliminate founders' personal liability.</div>
+<div class="verify-section"><div class="verify-label"><i class="fab fa-google"></i> Verify Partnership Act 1932</div><div class="verify-links">${gLink('Bangladesh Partnership Act 1932 Section 25 joint liability','Section 25 Joint Liability')}${gLink('Partnership Act 1932 Section 69 unregistered firm Bangladesh','Section 69 Unregistered Firm')}${gLink('Bangladesh partnership deed registration sub-registrar','Partnership Deed Registration')}${gLink('Convert partnership to private limited company Bangladesh','Convert to Pvt Ltd Bangladesh')}</div></div>`};
+  }
+
+  if(l.includes('compan')||l.includes('rjsc')||l.includes('incorporat')||l.includes('private limited')||l.includes('register')){
+    return{topic:'Companies Act 1994',chips:['BSTI licence beverage company','BFSA food safety certificate','Director duties Section 107','Annual return 42-day deadline'],reply:`
+<div class="rv-tag"><i class="fas fa-bolt"></i> Re-Volt Beverage Ltd. · Companies Act 1994</div>
+<strong>Companies Act 1994 — Incorporating Re‑Volt Beverage Ltd.</strong>
+<strong>Re‑Volt Beverage Ltd. must be registered under the Companies Act 1994</strong> with the RJSC (Registrar of Joint Stock Companies & Firms). Upon receiving the <strong>Certificate of Incorporation (Section 18)</strong>, Re-Volt becomes a separate legal entity — meaning the company, not its founders, owns assets and bears liabilities.
+<div class="example-box"><div class="ex-label">📌 Re-Volt Real Example</div>Once incorporated, if Re-Volt's debts reach ৳50 lakh and the company cannot pay, creditors can only claim against Re-Volt's company assets — NOT the personal bank accounts or homes of Re-Volt's directors. This is the "corporate veil" protection under Section 18.</div>
+<strong>Step-by-Step RJSC Registration for Re‑Volt:</strong>
+<div class="step-list">
+<div class="step-item"><div class="step-num">1</div><div><strong>Name Clearance — roc.gov.bd</strong><br>Apply for "Re-Volt Beverage Limited" clearance (provide 3 alternatives). <strong>Fee: ৳200</strong>. Approval: 1–2 working days. Check that no existing company has a similar name.</div></div>
+<div class="step-item"><div class="step-num">2</div><div><strong>Prepare MOA (Memorandum of Association)</strong><br>Must include Objects Clause: <em>"To manufacture, process, bottle, distribute and sell electrolyte beverages, sports drinks, and related food products."</em> Without this specific clause, Re-Volt legally cannot manufacture drinks.</div></div>
+<div class="step-item"><div class="step-num">3</div><div><strong>Prepare AOA (Articles of Association)</strong><br>Internal rules: share transfer restrictions, board meeting quorum, director appointment/removal, dividend declaration procedures.</div></div>
+<div class="step-item"><div class="step-num">4</div><div><strong>Form IX — Director Consent</strong><br>Each of Re-Volt's minimum 2 directors signs Form IX with NID photocopy. Required per Section 107.</div></div>
+<div class="step-item"><div class="step-num">5</div><div><strong>Stamp Duty Calculation</strong><br>Formula: 0.1% of authorized share capital. If Re-Volt's authorized capital = ৳10,00,000 → stamp duty = ৳1,000. Pay via Treasury Challan at Sonali Bank.</div></div>
+<div class="step-item"><div class="step-num">6</div><div><strong>Online Submission at roc.gov.bd</strong><br>Upload all scanned documents. Government fee: ৳1,000–৳5,000. <strong>Certificate of Incorporation issued in 5–10 working days.</strong></div></div>
+</div>
+<strong>Post-Incorporation — Re‑Volt's Mandatory Licences:</strong>
+<div class="step-list">
+<div class="step-item"><div class="step-num">A</div><div><strong>Trade Licence</strong> — Dhaka South/North City Corporation. Fee: ৳500–৳5,000. Within 30 days of incorporation.</div></div>
+<div class="step-item"><div class="step-num">B</div><div><strong>TIN</strong> — Free, online at <strong>incometax.gov.bd</strong>. Required for all tax filings. Same day.</div></div>
+<div class="step-item"><div class="step-num">C</div><div><strong>BSTI Licence (MANDATORY)</strong> — Bangladesh Standards and Testing Institution. All beverages must meet BDS standards. Apply at <strong>bsti.gov.bd</strong>. Timeline: 30–60 days. Re-Volt drinks must pass laboratory quality tests.</div></div>
+<div class="step-item"><div class="step-num">D</div><div><strong>BFSA Certificate</strong> — Bangladesh Food Safety Authority Act 2013. Production licence for food/drink manufacturers. Apply at <strong>bfsa.gov.bd</strong>.</div></div>
+<div class="step-item"><div class="step-num">E</div><div><strong>VAT Registration</strong> — If annual turnover exceeds ৳30 lakh, Re-Volt must register for VAT at 15% on sales. Apply at <strong>nbr.gov.bd</strong>.</div></div>
+</div>
+<div class="info-box"><i class="fas fa-info-circle"></i> <strong>Annual Compliance:</strong> Re-Volt must hold an AGM within 18 months of incorporation (Section 85), file Annual Return with RJSC within 42 days of AGM (Section 121), and submit audited financial statements.</div>
+<div class="verify-section"><div class="verify-label"><i class="fab fa-google"></i> Verify Companies Act 1994</div><div class="verify-links">${gLink('Bangladesh Companies Act 1994 RJSC registration procedure','Companies Act 1994 RJSC')}${gLink('roc.gov.bd company registration Bangladesh','roc.gov.bd Official Portal')}${gLink('BSTI licence food beverage company Bangladesh bsti.gov.bd','BSTI Beverage Licence')}${gLink('BFSA Bangladesh Food Safety Authority production licence','BFSA Production Licence')}</div></div>`};
+  }
+
+  if(l.includes('contract')||l.includes('supplier')||l.includes('distribut')||l.includes('agreement')||l.includes('breach')){
+    return{topic:'Contract Act 1872',chips:['Section 73 breach damages calc','Distribution agreement clauses','Force majeure COVID example','BIAC arbitration Bangladesh'],reply:`
+<div class="rv-tag"><i class="fas fa-bolt"></i> Re-Volt Beverage Ltd. · Contract Act 1872</div>
+<strong>Contract Act 1872 — Re‑Volt's Commercial Agreements</strong>
+<strong>Under the Contract Act 1872, Re‑Volt must ensure all commercial agreements are legally valid.</strong> Section 10 defines what makes a contract enforceable — if any element is missing, Re-Volt cannot enforce it in court.
+<strong>Essential Elements — Section 10 Applied to Re‑Volt:</strong>
+<div class="step-list">
+<div class="step-item"><div class="step-num">1</div><div><strong>Offer & Acceptance</strong> — Re-Volt sends a Purchase Order for 5,000 kg of sodium chloride to SupplierCo → SupplierCo confirms the order in writing = valid offer & acceptance. A verbal "yes" without written confirmation is risky for Re-Volt.</div></div>
+<div class="step-item"><div class="step-num">2</div><div><strong>Consideration</strong> — Re-Volt's payment = consideration for supplier's goods. Both parties must receive something of value.</div></div>
+<div class="step-item"><div class="step-num">3</div><div><strong>Free Consent (Sections 13–18)</strong> — Re-Volt cannot force a supplier to sign under duress. If Re-Volt's market dominance was used to impose unfair terms (undue influence), the supplier can void the contract.</div></div>
+</div>
+<strong>Re‑Volt's 3 Key Contract Types:</strong>
+<div class="step-list">
+<div class="step-item"><div class="step-num">A</div><div><strong>Raw Material Supply Agreement</strong><br>— Supplier name, item (e.g. "electrolyte powder, 95% purity min")<br>— Price: ৳850/kg, fixed for 6 months<br>— Delivery: within 7 days of PO<br>— <strong>Section 55 (Time Essence):</strong> "Delivery before Eid is of the essence — Re-Volt may cancel if delayed"</div></div>
+<div class="step-item"><div class="step-num">B</div><div><strong>Distribution Agreement</strong><br>— Exclusive territory: Sylhet Division<br>— Minimum monthly offtake: ৳2,00,000 worth of Re-Volt drinks<br>— Credit: 30 days from invoice<br>— Return policy: max 5% of batch, damaged/expired goods only<br>— <strong>Section 27 caution:</strong> Cannot prohibit distributor from ALL beverage trade after termination — only reasonable territorial/time restrictions are valid</div></div>
+<div class="step-item"><div class="step-num">C</div><div><strong>Retail/Pharmacy Agreement</strong><br>— Shelf placement, pricing floor (no below ৳45/bottle), payment terms</div></div>
+</div>
+<div class="example-box"><div class="ex-label">📌 Re-Volt Breach Example — Section 73</div>Re-Volt orders 10,000 bottles from a packaging supplier for ৳3,00,000. Supplier fails to deliver before Eid festival (peak sales period). Re-Volt loses ৳8,00,000 in Eid sales. Under Section 73, Re-Volt can claim: (a) ৳3,00,000 direct loss + (b) ৳8,00,000 consequential loss (if supplier knew about Eid dependency) + (c) cost of emergency alternative packaging + (d) 15% annual interest. Total potential claim: ৳11 lakh+.</div>
+<div class="alert-box"><i class="fas fa-exclamation-triangle"></i> <strong>Section 56 — Frustration:</strong> If a COVID-19 lockdown prevents Re-Volt's delivery to a distributor, the contract may be frustrated and obligations suspended — Re-Volt does not breach. Include explicit force majeure clauses covering pandemic, natural disaster, government orders.</div>
+<div class="success-box"><i class="fas fa-check-circle"></i> <strong>Re‑Volt Recommendation:</strong> Add BIAC (Bangladesh International Arbitration Centre) clause to all contracts. Arbitration is faster and cheaper than court. Include: "Any dispute shall be referred to BIAC arbitration under BIAC Rules, Dhaka."</div>
+<div class="verify-section"><div class="verify-label"><i class="fab fa-google"></i> Verify Contract Act 1872</div><div class="verify-links">${gLink('Bangladesh Contract Act 1872 Section 73 damages breach','Section 73 Breach Damages')}${gLink('Contract Act 1872 Section 10 essentials valid contract Bangladesh','Section 10 Valid Contract')}${gLink('BIAC Bangladesh International Arbitration Centre','BIAC Arbitration')}${gLink('Bangladesh distribution agreement clauses enforceable','Distribution Agreement BD')}</div></div>`};
+  }
+
+  if(l.includes('sale')||l.includes('goods')||l.includes('quality')||l.includes('drink')||l.includes('product')||l.includes('merchant')){
+    return{topic:'Sale of Goods 1930',chips:['Section 16 merchantable quality','Unpaid seller lien Section 47','Stoppage in transit Section 50','Consumer Rights Act 2009 DNCRP'],reply:`
+<div class="rv-tag"><i class="fas fa-bolt"></i> Re-Volt Beverage Ltd. · Sale of Goods Act 1930</div>
+<strong>Sale of Goods Act 1930 — Re‑Volt Product Sale Obligations</strong>
+<strong>The Sale of Goods Act 1930 governs every sale Re‑Volt Beverage Ltd. makes</strong> — from bulk supply to a distributor to a single bottle to a retail customer. Five implied conditions automatically apply to all Re-Volt sales.
+<strong>Implied Conditions Re‑Volt Must Fulfil:</strong>
+<div class="step-list">
+<div class="step-item"><div class="step-num">§14</div><div><strong>Title</strong> — Re-Volt must have the legal right to sell its drinks. Re-Volt's formula, branding, and BSTI-certified product name must not infringe any existing IP. If a rival company holds a prior patent on a similar electrolyte formula, Re-Volt's sale is void.</div></div>
+<div class="step-item"><div class="step-num">§15</div><div><strong>Sale by Description</strong> — If Re-Volt's invoice says "1,000 bottles × Re-Volt Mango Flavour, 250ml, 0% sugar, 250mg sodium" — the delivered product must EXACTLY match. If Re-Volt delivers orange flavour instead, the distributor can reject the entire consignment.</div></div>
+<div class="step-item"><div class="step-num">§16(2)</div><div><strong>Merchantable Quality</strong> — Re-Volt's electrolyte drinks must be fit for drinking: within expiry date, proper pH (6.5–7.2), no contamination, sealed caps, undamaged labels.
+<div class="example-box"><div class="ex-label">📌 Re-Volt Example</div>A pharmacy chain buys 500 cases of Re-Volt. 80 cases arrive with broken seals due to transport. Under Section 16(2), the pharmacy can reject all 500 cases and claim full refund — the entire batch is potentially compromised.</div></div></div>
+<div class="step-item"><div class="step-num">§16(1)</div><div><strong>Fitness for Specific Purpose</strong> — A hospital orders Re-Volt specifically for post-surgery rehydration patients. The hospital tells Re-Volt this purpose explicitly. Re-Volt must ensure the drinks meet clinical hydration standards — not just general drinking fitness.</div></div>
+<div class="step-item"><div class="step-num">§17</div><div><strong>Sale by Sample</strong> — Re-Volt shows a distributor a sample batch at a food fair. The bulk order delivered must match the sample in taste (within acceptable variance), colour, packaging, and net weight. If Re-Volt changes the formula between sample and bulk delivery, the distributor can reject.</div></div>
+</div>
+<strong>Re‑Volt as Unpaid Seller — 3 Powerful Rights:</strong>
+<div class="step-list">
+<div class="step-item"><div class="step-num">§47</div><div><strong>Lien</strong> — If Distributor X owes Re-Volt ৳3,50,000 from previous invoices, Re-Volt can hold back the next shipment (2,000 cases) until full payment. Re-Volt retains possession of goods until paid.</div></div>
+<div class="step-item"><div class="step-num">§50</div><div><strong>Stoppage in Transit</strong> — Re-Volt ships 5,000 cases to Chittagong distributor. Halfway through transport, Re-Volt learns the distributor has declared insolvency. Re-Volt can immediately instruct the carrier (truck company) to stop delivery and return the goods. Must act before goods reach buyer's premises.</div></div>
+<div class="step-item"><div class="step-num">§55</div><div><strong>Sue for Price</strong> — Once Re-Volt hands over the drinks and ownership passes, Re-Volt can sue for the full invoice price (৳X) plus 15% annual interest, regardless of whether the distributor has sold the drinks onwards.</div></div>
+</div>
+<div class="info-box"><i class="fas fa-info-circle"></i> <strong>Consumer Rights Protection Act 2009:</strong> DNCRP (Directorate of National Consumer Rights Protection) can fine Re-Volt up to ৳2,00,000 for: (1) selling expired drinks, (2) mislabeling ingredients (e.g. claiming "no preservatives" when preservatives are present), (3) overcharging MRP, (4) refusing to exchange defective products.</div>
+<div class="verify-section"><div class="verify-label"><i class="fab fa-google"></i> Verify Sale of Goods Act 1930</div><div class="verify-links">${gLink('Sale of Goods Act 1930 Bangladesh Section 16 merchantable quality','Section 16 Merchantable Quality')}${gLink('Sale of Goods Act 1930 unpaid seller rights lien stoppage Bangladesh','Unpaid Seller Rights BD')}${gLink('Consumer Rights Protection Act 2009 Bangladesh DNCRP','Consumer Rights Act 2009')}${gLink('BSTI product quality standard Bangladesh beverage','BSTI Quality Standards')}</div></div>`};
+  }
+
+  if(l.includes('cheque')||l.includes('bounce')||l.includes('138')||l.includes('dishon')||l.includes('negotiable')||l.includes('payment recovery')){
+    return{topic:'NI Act 1881 · Sec.138',chips:['30-day legal notice format','Artha Rin Adalat ৳10 lakh+','Section 138 criminal penalty','Civil suit parallel to 138'],reply:`
+<div class="rv-tag"><i class="fas fa-bolt"></i> Re-Volt Beverage Ltd. · NI Act 1881 · Section 138</div>
+<strong>NI Act 1881 — Cheque Dishonour Recovery for Re‑Volt</strong>
+<strong>If a distributor's cheque to Re‑Volt Beverage Ltd. is dishonoured</strong>, Section 138 of the Negotiable Instruments Act 1881 provides Bangladesh's most powerful commercial debt recovery mechanism — combining criminal prosecution with financial compensation.
+<div class="example-box"><div class="ex-label">📌 Re-Volt Scenario</div>Dhaka distributor, Speedy Trade, issues Re-Volt a cheque dated 1st June for <strong>৳5,00,000</strong> (five lakh) for a bulk order of 10,000 bottles. On 3rd June, Re-Volt's bank returns the cheque marked "Insufficient Funds." Here is the exact legal procedure:</div>
+<strong>Complete Step-by-Step Procedure — Section 138:</strong>
+<div class="step-list">
+<div class="step-item"><div class="step-num">1</div><div><strong>Collect Bank Return Memo (Day 0)</strong><br>Date: 3rd June. Re-Volt's bank issues official return memo. This document is the legal trigger. Keep original — it is evidence in court. Note the exact reason: "Insufficient Funds" / "Account Closed" / "Payment Stopped".</div></div>
+<div class="step-item"><div class="step-num">2</div><div><strong>Issue Legal Notice — WITHIN 30 DAYS (by 3rd July)</strong><br>Re-Volt's lawyer sends a <strong>registered post notice + courier with tracking</strong> to Speedy Trade's registered address. The notice must state:<br>— Cheque No., Date: 1st June, Amount: ৳5,00,000<br>— Reason for dishonour: Insufficient funds<br>— Demand: Pay Re-Volt ৳5,00,000 within 15 days<br>— Warning: Criminal complaint will be filed if unpaid<br><strong>Keep postal receipt + delivery confirmation.</strong></div></div>
+<div class="step-item"><div class="step-num">3</div><div><strong>Wait 15 Days for Payment (3rd July → 18th July)</strong><br>If Speedy Trade pays ৳5,00,000 within 15 days → matter resolved, no court needed.<br>If NOT paid by 18th July → proceed to Step 4.</div></div>
+<div class="step-item"><div class="step-num">4</div><div><strong>File Criminal Complaint — WITHIN 30 DAYS of notice expiry (by 17th August)</strong><br>File at: <strong>Chief Metropolitan Magistrate Court, Dhaka</strong> (the court in the jurisdiction where Re-Volt's bank is located). Documents required:<br>✅ Original dishonoured cheque<br>✅ Bank return memo<br>✅ Copy of legal notice<br>✅ Postal receipt (proof of delivery)<br>✅ Original sales invoice (৳5,00,000 order)<br>✅ Company registration certificate</div></div>
+<div class="step-item"><div class="step-num">5</div><div><strong>Criminal Trial & Conviction</strong><br>Under Section 138 conviction, the court can order:<br>— <strong>Imprisonment: up to 2 years</strong>, OR<br>— <strong>Fine: up to TWICE the cheque amount</strong> = up to ৳10,00,000 (10 lakh), OR<br>— <strong>Both</strong> imprisonment AND fine<br>The criminal threat typically results in rapid settlement — Speedy Trade will pay to avoid imprisonment.</div></div>
+</div>
+<div class="alert-box"><i class="fas fa-exclamation-triangle"></i> <strong>CRITICAL DEADLINES:</strong> Missing ANY of these deadlines kills Re-Volt's case permanently:<br>📅 30 days from bank memo → send legal notice<br>📅 15 days after notice → distributor must pay<br>📅 30 days after notice expiry → file court complaint<br>Total window: approximately 75 days from bounce date.</div>
+<div class="info-box"><i class="fas fa-info-circle"></i> <strong>Parallel Recovery via Artha Rin Adalat Ain 2003:</strong> For amounts ৳10 lakh+, Re-Volt can simultaneously file in the Artha Rin Adalat (Commercial Court). This civil suit runs parallel to the criminal Section 138 case and focuses on recovering the money amount + interest. Both can proceed at the same time.</div>
+<div class="success-box"><i class="fas fa-check-circle"></i> <strong>Settlement Option (Section 320 CrPC):</strong> Even after filing the Section 138 complaint, Speedy Trade can approach Re-Volt for compounding (settlement). Speedy Trade pays ৳5,00,000 + Re-Volt's legal costs (approx. ৳30,000–৳50,000) → Re-Volt withdraws the complaint. This is often the practical outcome within 2–4 months of filing.</div>
+<div class="verify-section"><div class="verify-label"><i class="fab fa-google"></i> Verify NI Act 1881 Section 138</div><div class="verify-links">${gLink('Negotiable Instruments Act 1881 Section 138 Bangladesh cheque bounce','NI Act 1881 Section 138')}${gLink('Section 138 cheque dishonour procedure Bangladesh 30 days notice','30-Day Notice Procedure')}${gLink('Artha Rin Adalat Ain 2003 Bangladesh commercial debt recovery','Artha Rin Adalat 2003')}${gLink('cheque bounce criminal case Bangladesh Magistrate court procedure','Magistrate Court Procedure')}</div></div>`};
+  }
+
+  // Company profile / intro
+  return{topic:'Bangladesh Business Law',chips:['Re-Volt Partnership Act 1932','Companies Act 1994 RJSC','Contract Act 1872 examples','NI Act 1881 Section 138'],reply:`
+<div class="rv-tag"><i class="fas fa-bolt"></i> Re-Volt Legal AI · Bangladesh Business Law</div>
+I am <strong>Re‑Volt Legal AI</strong>, the official legal assistant of <strong>Re‑Volt Beverage Ltd.</strong> — Bangladesh's Premium Electrolyte Drink Company.
+<div class="step-list">
+<div class="step-item"><div class="step-num">1</div><div><strong>Partnership Act 1932</strong> — At the initial stage, Re-Volt's founders operated under this Act. Key: Section 25 (joint liability), Section 69 (court bar for unregistered firm), partnership deed clauses.</div></div>
+<div class="step-item"><div class="step-num">2</div><div><strong>Companies Act 1994</strong> — Re-Volt is currently registered as a Private Limited company with RJSC. Key: Certificate of Incorporation, MOA objects clause, BSTI/BFSA licences.</div></div>
+<div class="step-item"><div class="step-num">3</div><div><strong>Contract Act 1872</strong> — Governs all Re-Volt commercial agreements. Key: Section 10 (valid contract), Section 73 (breach damages with ৳ examples), Section 55 (time essence).</div></div>
+<div class="step-item"><div class="step-num">4</div><div><strong>Sale of Goods Act 1930</strong> — Governs Re-Volt's product sales. Key: Sections 14–17 (implied conditions on drink quality), Sections 47/50/55 (unpaid seller rights).</div></div>
+<div class="step-item"><div class="step-num">5</div><div><strong>NI Act 1881 Section 138</strong> — Protects Re-Volt when distributor cheques bounce. Key: 30-day notice, 15-day payment window, criminal penalty up to 2 years + ৳10 lakh fine.</div></div>
+</div>
+Click any law card on the left, or ask a specific question about Re-Volt Beverage Ltd.'s legal situation.
+<div class="verify-section"><div class="verify-label"><i class="fab fa-google"></i> Verify Bangladesh Business Laws</div><div class="verify-links">${gLink('Bangladesh business laws partnership companies contract','Bangladesh Business Laws')}${gLink('RJSC Bangladesh company registration roc.gov.bd','RJSC Company Registration')}${gLink('Bangladesh beverage company BSTI BFSA licence requirement','BSTI BFSA Beverage Licence')}${gLink('Bangladesh commercial law 2024 startup company','BD Commercial Law Startup')}</div></div>`};
+}
+
+function saveHistory(){try{localStorage.setItem('revolt_legal_v3',JSON.stringify(conversation.slice(-40)));}catch(e){}}
+function restoreHistory(){try{const s=localStorage.getItem('revolt_legal_v3');if(!s)return;const h=JSON.parse(s);if(!h.length)return;$('welcomeHero')?.remove();h.forEach(m=>{addMsg(m.content,m.role);});conversation=h;updateMsgCount();}catch(e){}}
+
+restoreHistory();
+setStatus('Re‑Volt Legal AI — Ready','var(--green)');
+if(window.speechSynthesis&&speechSynthesis.onvoiceschanged!==undefined){speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices();}
+</script>
+</body>
+</html>
